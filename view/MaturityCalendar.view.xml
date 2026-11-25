@@ -1,0 +1,64 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.MaturityCalendar"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:u="sap.ui.unified"
+	xmlns:layout="sap.ui.layout"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+				<Toolbar class="fdSectionHeader horizonHeader sapUiSmallMarginBottom">
+					<core:Icon src="sap-icon://calendar" class="fdMetricIcon fdMetricIconTeal"/>
+					<Title text="Maturity Calendar" level="H2"/>
+				</Toolbar>
+
+				<layout:Grid defaultSpan="L6 M12 S12" hSpacing="1" class="horizonGrid">
+					
+					<!-- Left Side: Interactive Calendar -->
+					<VBox class="fdSectionCard horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<Title text="Select a date to view maturities" level="H3"/>
+						</Toolbar>
+						<FlexBox justifyContent="Center" class="sapUiSmallMargin">
+							<u:Calendar
+								id="maturityCalendar"
+								select=".onSelectDate"
+								width="100%"
+								months="1" />
+						</FlexBox>
+					</VBox>
+
+					<!-- Right Side: Maturing FDs Table -->
+					<VBox class="fdSectionCard horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<Title text="Fixed Deposits maturing on {cal>/selectedDateText}" level="H3"/>
+							<ToolbarSpacer/>
+							<ObjectStatus text="{cal>/maturingCount} FDs" state="Warning" icon="sap-icon://alert"/>
+						</Toolbar>
+						<Table id="maturingTable" items="{cal>/maturingFds}" noDataText="No Fixed Deposits maturing on this date." class="fdDataTable">
+							<columns>
+								<Column><Text text="FD Number"/></Column>
+								<Column><Text text="Bank"/></Column>
+								<Column><Text text="Principal"/></Column>
+								<Column hAlign="End"><Text text="Maturity Value"/></Column>
+							</columns>
+							<items>
+								<ColumnListItem type="Inactive">
+									<cells>
+										<ObjectIdentifier title="{cal>id}"/>
+										<Text text="{cal>bank}"/>
+										<Text text="{cal>principalText}"/>
+										<ObjectNumber number="{cal>maturityValueText}" state="Success"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</VBox>
+
+				</layout:Grid>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

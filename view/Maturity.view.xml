@@ -1,0 +1,316 @@
+<mvc:View
+    controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.Maturity"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:layout="sap.ui.layout"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    displayBlock="true">
+
+    <Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+        <content>
+            <html:style>
+                .horizonDashboardPage { background-color: #F3F4F6; min-height: 100vh; padding-bottom: 24px; }
+                .fdTopHeader { background-color: #ffffff; padding: 16px 24px; border-bottom: 1px solid #E5E7EB; margin-bottom: 16px; }
+                
+                .fdCard { background: #ffffff; border-radius: 8px; border: 1px solid #E5E7EB; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); margin-bottom: 16px; }
+                
+                .fdAdvKpiCard { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #E5E7EB; flex: 1; margin-right: 16px; }
+                .fdAdvKpiCard:last-child { margin-right: 0; }
+                
+                .fdAdvKpiIconBox { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
+                .fdAdvKpiIconBlue { background-color: #EFF6FF; color: #3B82F6; }
+                .fdAdvKpiIconGreen { background-color: #ECFDF5; color: #10B981; }
+                .fdAdvKpiIconOrange { background-color: #FFF7ED; color: #F97316; }
+                .fdAdvKpiIconPurple { background-color: #F3E8FF; color: #A855F7; }
+
+                .fdAdvKpiValue { font-size: 1.5rem; font-weight: 700; color: #111928; margin-top: 4px; margin-bottom: 4px; }
+                .fdAdvKpiLabel { font-size: 0.75rem; color: #6B7280; }
+                
+                .fdPanelHeader { border-bottom: 1px solid #E5E7EB; padding-bottom: 12px; margin-bottom: 16px; }
+                .fdPanelTitle { font-weight: bold; font-size: 1.1rem; color: #111928; }
+                
+                .fdDetailRow { margin-bottom: 12px; display: flex; justify-content: space-between; }
+                .fdDetailLabel { color: #6B7280; font-size: 0.85rem; }
+                .fdDetailVal { color: #111928; font-weight: 500; font-size: 0.85rem; }
+                
+                .fdTimelineBox { border-left: 2px solid #E5E7EB; margin-left: 12px; padding-left: 24px; position: relative; padding-bottom: 24px; }
+                .fdTimelineIcon { position: absolute; left: -14px; top: 0; background: #ffffff; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+                .fdTimelineIcon.fdBlueIcon { border: 2px solid #3B82F6; color: #3B82F6; }
+                .fdTimelineIcon.fdGreenIcon { border: 2px solid #10B981; color: #10B981; }
+                .fdTimelineIcon.fdOrangeIcon { border: 2px solid #F97316; color: #F97316; }
+                .fdTimelineIcon.fdPurpleIcon { border: 2px solid #A855F7; color: #A855F7; }
+                
+                .fdTimelineIconInner { background: currentColor; width: 8px; height: 8px; border-radius: 50%; }
+
+                .fdBtnBlue { background-color: #1D4ED8 !important; border-color: #1D4ED8 !important; color: #ffffff !important; font-weight: bold; }
+                .fdBtnOutline { background-color: #ffffff !important; border-color: #D1D5DB !important; color: #374151 !important; font-weight: bold; }
+                
+                .fdTagActive { background-color: #DEF7EC; color: #03543F; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
+                
+                .fdTableStriped { width: 100%; border-collapse: collapse; }
+                .fdTableStriped th { background-color: #F9FAFB; padding: 8px 12px; text-align: left; font-size: 0.8rem; color: #111928; border-bottom: 1px solid #E5E7EB; font-weight: bold; }
+                .fdTableStriped td { padding: 8px 12px; font-size: 0.85rem; color: #111928; border-bottom: 1px solid #E5E7EB; }
+                .fdTableStriped tr.fdTotalRow { background-color: #ECFDF5; }
+                .fdTableStriped tr.fdTotalRow td { color: #046C4E; font-weight: bold; }
+            </html:style>
+
+            <!-- Top Header -->
+            <HBox class="fdTopHeader" justifyContent="SpaceBetween" alignItems="Center">
+                <HBox alignItems="Center">
+                    <core:Icon src="sap-icon://bell" color="#1D4ED8" size="1.5rem" class="sapUiSmallMarginEnd"/>
+                    <VBox>
+                        <Title text="Maturity Alerts" level="H2" style="font-weight: bold; color: #111928; font-size: 1.25rem;" />
+                        <Text text="Track and process fixed deposit maturities" style="color: #6B7280; font-size: 0.85rem;" />
+                    </VBox>
+                </HBox>
+                <HBox alignItems="Center">
+                    
+                    <Button text="View History" icon="sap-icon://history" type="Transparent" press=".onNavMaturityHistory" class="sapUiSmallMarginEnd" style="color: #1D4ED8; font-weight: bold;" />
+                    <Button text="View Calendar" icon="sap-icon://calendar" type="Transparent" press=".onNavMaturityCalendar" style="color: #1D4ED8; font-weight: bold;" />
+                </HBox>
+            </HBox>
+
+            <VBox class="sapUiLargeMarginBegin sapUiLargeMarginEnd">
+                
+                <!-- FD Selection Card -->
+                <HBox class="fdCard" alignItems="Center">
+                    <core:Icon src="sap-icon://fa-regular/address-card" color="#1D4ED8" size="1.2rem" class="sapUiSmallMarginEnd"/>
+                    <Title text="Select Fixed Deposit" style="font-weight: bold; color: #111928;" class="sapUiLargeMarginEnd"/>
+                    
+                    <VBox class="sapUiLargeMarginEnd">
+                        <Label text="FD Number *" style="color: #DC2626; font-size: 0.75rem; margin-bottom: 4px;" />
+                        <ComboBox 
+                            items="{fdList>/items}" 
+                            change=".onFDSelectionChange"
+                            width="250px"
+                            selectedKey="{maturity>/fdNumber}">
+                            <core:Item key="{fdList>FdAccno}" text="{fdList>FdAccno}" />
+                        </ComboBox>
+                    </VBox>
+                    <Button text="Refresh" class="fdBtnBlue sapUiSmallMarginTop" press=".onRefreshFDList"/>
+                </HBox>
+
+                <!-- FD Overview / KPI Cards -->
+                <VBox class="fdCard" visible="{= !!${maturity>/fdNumber} }">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                        <HBox alignItems="Center">
+                            <core:Icon src="sap-icon://form" color="#6B7280" size="1.2rem" class="sapUiSmallMarginEnd"/>
+                            <Title text="FD {maturity>/fdNumber}" style="font-weight: bold; font-size: 1.1rem; color: #111928;" class="sapUiTinyMarginEnd"/>
+                            <Text text="Active" class="fdTagActive sapUiMediumMarginEnd" />
+                            <Text text="{maturity>/bankName} | Company Code: {maturity>/coCode}" style="color: #6B7280; font-size: 0.85rem;" />
+                        </HBox>
+                        <HBox>
+                            <Text text="Start Date: {maturity>/startDate} | Maturity Date: {= ${maturity>/isPremature} ? ${maturity>/actualMaturityDateText} + ' (Premature)' : ${maturity>/scheduledMaturityDateText} } | Tenor: {maturity>/calculatedTenorMonths} Months" style="color: #6B7280; font-size: 0.85rem;" />
+                        </HBox>
+                    </HBox>
+
+                    <HBox width="100%" justifyContent="SpaceBetween">
+                        <VBox class="fdAdvKpiCard" style="background-color: #F8FAFC;">
+                            <HBox alignItems="Start">
+                                <VBox class="fdAdvKpiIconBox fdAdvKpiIconBlue"><core:Icon src="sap-icon://database"/></VBox>
+                                <VBox>
+                                    <Text text="Principal Amount" class="fdAdvKpiLabel" />
+                                    <HBox alignItems="Baseline"><Text text="{maturity>/principal}" class="fdAdvKpiValue" /><Text text=" INR" class="sapUiTinyMarginLeft" style="font-weight: bold; color: #6B7280; font-size: 0.85rem;"/></HBox>
+                                    <Text text="{maturity>/bankName}" class="fdAdvKpiLabel" style="color: #1D4ED8; font-weight: bold;" />
+                                    <HBox alignItems="Center" class="sapUiTinyMarginTop" visible="{= ${maturity>/lienAmt} !== undefined }">
+                                        <Text text="Lien: ₹ {maturity>/lienAmtText}" style="font-size: 0.75rem; color: #D97706; font-weight: 600;" class="sapUiTinyMarginEnd"/>
+                                        <Text text="Not Lien: ₹ {maturity>/notLienAmtText}" style="font-size: 0.75rem; color: #059669; font-weight: 600;"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        <VBox class="fdAdvKpiCard" style="background-color: #F0FDF4;">
+                            <HBox alignItems="Start">
+                                <VBox class="fdAdvKpiIconBox fdAdvKpiIconGreen"><core:Icon src="sap-icon://trend-up"/></VBox>
+                                <VBox>
+                                    <Text text="Interest Amount" class="fdAdvKpiLabel" />
+                                    <HBox alignItems="Baseline"><Text text="{maturity>/interestText}" class="fdAdvKpiValue" /><Text text=" INR" class="sapUiTinyMarginLeft" style="font-weight: bold; color: #6B7280; font-size: 0.85rem;"/></HBox>
+                                    <Text text="{maturity>/interestRate}% • {maturity>/calculatedTenorMonths} months" class="fdAdvKpiLabel" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        <VBox class="fdAdvKpiCard" style="background-color: #FFF7ED;">
+                            <HBox alignItems="Start">
+                                <VBox class="fdAdvKpiIconBox fdAdvKpiIconOrange"><core:Icon src="sap-icon://receipt"/></VBox>
+                                <VBox>
+                                    <Text text="Estimated TDS Amount" class="fdAdvKpiLabel" />
+                                    <HBox alignItems="Baseline"><Text text="{maturity>/estimatedTdsText}" class="fdAdvKpiValue" /><Text text=" INR" class="sapUiTinyMarginLeft" style="font-weight: bold; color: #6B7280; font-size: 0.85rem;"/></HBox>
+                                    <Text text="{= ${maturity>/tdsApplicable} ? 'TDS Applicable (10%)' : 'No TDS applicable' }" class="fdAdvKpiLabel" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        <VBox class="fdAdvKpiCard" style="background-color: #FDF4FF;">
+                            <HBox alignItems="Start">
+                                <VBox class="fdAdvKpiIconBox fdAdvKpiIconPurple"><core:Icon src="sap-icon://document"/></VBox>
+                                <VBox>
+                                    <Text text="FD Document" class="fdAdvKpiLabel" />
+                                    <Text text="{= ${maturity>/fdDocNo} || 'Not posted yet' }" class="fdAdvKpiValue" style="font-size: 1.1rem; margin-bottom: 8px;" />
+                                    <Button text="View" icon="sap-icon://attachment" type="Transparent" style="border: 1px solid #A855F7; color: #A855F7; border-radius: 4px; padding: 0 8px; height: 24px;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <HBox width="100%" visible="{= !!${maturity>/fdNumber} }" justifyContent="SpaceBetween" alignItems="Stretch">
+                    
+                    <!-- Left Column -->
+                    <VBox width="58%">
+                        <!-- Maturity Details -->
+                        <VBox class="fdCard sapUiSmallMarginBottom">
+                            <HBox class="fdPanelHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                <HBox alignItems="Center">
+                                    <core:Icon src="sap-icon://list" color="#1D4ED8" class="sapUiSmallMarginEnd" size="1.2rem"/>
+                                    <Title text="Maturity Details" class="fdPanelTitle" />
+                                </HBox>
+                                <ObjectStatus text="{= ${maturity>/isPremature} ? 'Premature Maturity' : 'Standard Maturity' }" state="{= ${maturity>/isPremature} ? 'Warning' : 'Success' }" inverted="true" />
+                            </HBox>
+                            
+                            <VBox>
+                                <HBox class="fdDetailRow"><Text text="FD Number" class="fdDetailLabel" /><Text text="{maturity>/fdNumber}" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Company Code" class="fdDetailLabel" /><Text text="{maturity>/coCode}" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Bank Name" class="fdDetailLabel" /><Text text="{maturity>/bankName}" class="fdDetailVal" style="color: #1D4ED8;"/></HBox>
+                                <HBox class="fdDetailRow"><Text text="Start Date" class="fdDetailLabel" /><Text text="{maturity>/startDate}" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow" alignItems="Center">
+                                    <VBox>
+                                        <HBox alignItems="Center">
+                                            <Text text="Maturity Date" class="fdDetailLabel" />
+                                            <Text text=" (Premature)" visible="{maturity>/isPremature}" style="font-size: 0.75rem; color: #D97706; font-weight: bold; margin-left: 4px;" />
+                                        </HBox>
+                                        <Text text="Scheduled: {maturity>/scheduledMaturityDateText}" style="font-size: 0.72rem; color: #6B7280;" visible="{maturity>/isPremature}" class="sapUiTinyMarginTop" />
+                                    </VBox>
+                                    <HBox alignItems="Center">
+                                        <DatePicker 
+                                            id="prematureMaturityDatePicker"
+                                            value="{maturity>/actualMaturityDateText}" 
+                                            valueFormat="yyyy-MM-dd" 
+                                            displayFormat="dd-MMM-yyyy" 
+                                            change=".onMaturityDateChange"
+                                            visible="{maturity>/isPremature}"
+                                            width="150px" />
+                                        <Text text="{maturity>/scheduledMaturityDateText}" class="fdDetailVal" visible="{= !${maturity>/isPremature} }" />
+                                    </HBox>
+                                </HBox>
+                                <HBox class="fdDetailRow"><Text text="FD Tenure" class="fdDetailLabel" /><Text text="{maturity>/tenor} Months" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Calculated Tenure Till Date" class="fdDetailLabel" /><Text text="{maturity>/calculatedTenorMonths} Months" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Principal Amount" class="fdDetailLabel" /><Text text="{maturity>/principal} INR" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Interest Rate" class="fdDetailLabel" /><Text text="{maturity>/interestRate} % (p.a.)" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow">
+                                    <VBox>
+                                        <Text text="System-calculated interest" class="fdDetailLabel" />
+                                        <Text text="Based on {maturity>/interestDays} days @ {maturity>/interestRate}%" style="font-size: 0.72rem; color: #6B7280;" class="sapUiTinyMarginTop" />
+                                    </VBox>
+                                    <Text text="{maturity>/calculatedInterestText} INR" class="fdDetailVal" />
+                                </HBox>
+                                <HBox class="fdDetailRow" alignItems="Center">
+                                    <VBox>
+                                        <Text text="Interest Amount (Entered)" class="fdDetailLabel" />
+                                        <Text text="Manual override active" style="font-size: 0.72rem; color: #D97706; font-weight: bold;" visible="{= ${maturity>/interestText} !== ${maturity>/calculatedInterestText} }" class="sapUiTinyMarginTop" />
+                                    </VBox>
+                                    <HBox alignItems="Center">
+                                        <Input 
+                                            id="maturityInterestInput"
+                                            value="{maturity>/interestText}" 
+                                            type="Number" 
+                                            width="130px" 
+                                            liveChange=".onInterestChange" 
+                                            change=".onInterestChange" 
+                                            textAlign="End" />
+                                        <Text text=" INR" class="sapUiTinyMarginBegin sapUiTinyMarginEnd" style="font-weight: 500; font-size: 0.85rem;" />
+                                        <Button icon="sap-icon://refresh" tooltip="Reset to system-calculated interest" type="Transparent" press=".onRecalculateInterest" />
+                                    </HBox>
+                                </HBox>
+                                <HBox class="fdDetailRow"><Text text="TDS Applicable" class="fdDetailLabel" /><Text text="{= ${maturity>/tdsApplicable} ? 'Yes (10%)' : 'No' }" class="fdDetailVal" /></HBox>
+                                <HBox class="fdDetailRow"><Text text="Estimated TDS (pre-posting)" class="fdDetailLabel" /><Text text="{maturity>/estimatedTdsText} INR" class="fdDetailVal" /></HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Maturity Success Details -->
+                        <VBox class="fdCard" visible="{= ${maturityDisplay>/records}.length > 0 }">
+                            <HBox class="fdPanelHeader" alignItems="Center">
+                                <core:Icon src="sap-icon://sys-enter-2" color="#10B981" class="sapUiSmallMarginEnd" size="1.2rem"/>
+                                <Title text="Maturity Success Details" class="fdPanelTitle" />
+                            </HBox>
+                            <html:table class="fdTableStriped">
+                                <html:thead>
+                                    <html:tr>
+                                        <html:th>FD Document</html:th>
+                                        <html:th>TDS Document</html:th>
+                                        <html:th style="text-align: right;">Posted TDS Amount (SAP)</html:th>
+                                    </html:tr>
+                                </html:thead>
+                                <html:tbody>
+                                    <html:tr>
+                                        <html:td><Text text="{maturityDisplay>/records/0/fdDocNo}" design="Bold" style="color: #059669;"/></html:td>
+                                        <html:td><Text text="{= ${maturityDisplay>/records/0/tdsDocNo} || 'Not Applicable' }"/></html:td>
+                                        <html:td style="text-align: right;"><Text text="{maturityDisplay>/records/0/tdsAmt} INR"/></html:td>
+                                    </html:tr>
+                                </html:tbody>
+                            </html:table>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Right Column -->
+                    <VBox width="40%">
+                        <!-- Lifecycle Timeline -->
+                        <VBox class="fdCard sapUiSmallMarginBottom">
+                            <HBox class="fdPanelHeader" alignItems="Center">
+                                <core:Icon src="sap-icon://history" color="#111928" class="sapUiSmallMarginEnd" size="1.2rem"/>
+                                <Title text="Lifecycle Timeline" class="fdPanelTitle" />
+                            </HBox>
+
+                            <VBox class="sapUiSmallMarginTop sapUiSmallMarginBottom" items="{maturity>/timeline}">
+                                <VBox class="fdTimelineBox">
+                                    <VBox class="fdTimelineIcon" alignItems="Center" justifyContent="Center" style="background-color: #ffffff;">
+                                        <core:Icon src="sap-icon://record" color="{maturity>colorHex}" size="1rem" />
+                                    </VBox>
+                                    <HBox justifyContent="SpaceBetween" alignItems="Start" class="sapUiSmallMarginBottom">
+                                        <VBox>
+                                            <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                                <core:Icon src="{maturity>icon}" class="sapUiTinyMarginEnd" color="#1D4ED8" />
+                                                <Text text="{maturity>title}" class="fdTimelineTitle" />
+                                            </HBox>
+                                            <Text text="{maturity>subtitle}" class="fdDetailLabel" />
+                                        </VBox>
+                                        <Text text="{maturity>dateText}" textAlign="End" class="sapUiSmallMarginLeft" style="color: #1D4ED8; font-weight: bold; font-size: 0.85rem;" />
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <VBox class="sapUiMediumMarginTop">
+                                <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <CheckBox selected="{maturity>/tdsApplicable}" select=".onTDSSelect"/>
+                                    <Text text="TDS Applicable" style="font-weight: 500; color: #111928;" />
+                                    <core:Icon src="sap-icon://information" class="sapUiTinyMarginLeft" color="#6B7280" tooltip="Checking this or clicking Process Maturity will trigger backend maturity processing."/>
+                                </HBox>
+                                <Button text="Process Maturity" type="Emphasized" icon="sap-icon://accept" press=".onProcessMaturity" width="100%" class="sapUiTinyMarginTop fdBtnBlue" />
+                            </VBox>
+                            
+                            <!-- Success / Error Statuses -->
+                            <Text text="{maturityDisplay>/error}" visible="{= !!${maturityDisplay>/error} }" class="sapUiTinyMarginTop" style="color: #DC2626;"/>
+                            <MessageStrip text="{maturity>/maturityStatusText}" type="Success" showIcon="true" visible="{= ${maturity>/maturityStatusText} !== '' }" class="sapUiTinyMarginTop"/>
+                        </VBox>
+
+                        <!-- Important Information -->
+                        <VBox class="fdCard" style="background-color: #F8FAFC; border: 1px solid #E5E7EB;">
+                            <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                                <core:Icon src="sap-icon://information" color="#1D4ED8" size="1.1rem" class="sapUiSmallMarginEnd" />
+                                <Title text="Important Information" style="font-size: 0.9rem; font-weight: bold; color: #111928;" />
+                            </HBox>
+                            <html:ul style="margin: 0; padding-left: 20px; color: #374151; font-size: 0.85rem; line-height: 1.6;">
+                                <html:li>TDS is applicable if interest amount exceeds 5,000 INR.</html:li>
+                                <html:li>On maturity, accounting documents will be generated automatically.</html:li>
+                                <html:li>Please verify the details before processing.</html:li>
+                                
+                            </html:ul>
+                        </VBox>
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

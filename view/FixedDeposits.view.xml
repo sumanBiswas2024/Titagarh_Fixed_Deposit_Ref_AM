@@ -1,0 +1,237 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.FixedDeposits"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:u="sap.ui.unified"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdPage">
+		<content>
+			<html:style>
+				.fdAdvKpiCard {
+					background: #ffffff;
+					border-radius: 12px;
+					border: 1px solid #eef1f6;
+					box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+					padding: 16px;
+				}
+				.fdAdvKpiIconBox {
+					width: 48px;
+					height: 48px;
+					border-radius: 12px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-right: 16px;
+				}
+				.fdAdvKpiIconBlue { background-color: #EFF6FF; color: #2563EB; }
+				.fdAdvKpiIconGreen { background-color: #ECFDF5; color: #059669; }
+				.fdAdvKpiIconPurple { background-color: #F3E8FF; color: #9333EA; }
+				.fdAdvKpiIconOrange { background-color: #FFF7ED; color: #EA580C; }
+
+				.fdAdvKpiValue { font-size: 1.25rem; font-weight: 700; color: #111928; }
+				.fdAdvKpiLabel { font-size: 0.8rem; color: #6B7280; margin-top: 4px; }
+				.fdAdvKpiTrend { font-size: 0.8rem; font-weight: bold; }
+				.fdAdvKpiTrendUp { color: #059669; }
+				.fdAdvKpiTrendDown { color: #DC2626; }
+				.fdAdvKpiTrendLabel { font-size: 0.75rem; color: #9CA3AF; margin-left: 4px; }
+
+				.fdDataTable { background: #ffffff; border-radius: 12px; border: 1px solid #eef1f6; }
+				.fdDataTable .sapMListTblHeader .sapMColumnHeader { background: #F9FAFB; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #4B5563; text-transform: uppercase; font-size: 0.75rem; }
+				.fdDataTable .sapMListTblCell { border-bottom: 1px solid #F3F4F6; vertical-align: middle; padding: 12px 8px; }
+				.fdDataTable .sapMListTblRow { border-bottom: none !important; }
+
+				.fdDataTable .sapMObjStatusSuccess .sapMObjStatusText {
+					background-color: #DEF7EC;
+					color: #03543F;
+					padding: 4px 12px;
+					border-radius: 12px;
+					font-weight: 600;
+					font-size: 0.75rem;
+				}
+
+				.fdAdvBtn { border-radius: 6px; padding: 0 16px; height: 36px; font-weight: bold; margin-left: 8px; }
+				.fdAdvBtnOutline { border: 1px solid #D1D5DB; background: #ffffff; color: #4B5563; }
+				.fdAdvBtnBlue { background: #1D4ED8; color: #ffffff; border: none; }
+				
+				.fdTabs .sapMSegBBtn { background: transparent; border: none; color: #6B7280; font-weight: bold; }
+				.fdTabs .sapMSegBBtnSel { background: transparent; border-bottom: 2px solid #1D4ED8; color: #1D4ED8; }
+			</html:style>
+
+			<VBox class="sapUiMediumMargin">
+				
+				<!-- Header Toolbar -->
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBottom" width="100%">
+					<VBox>
+						<Title text="Active Fixed Deposits" level="H2" class="sapUiTinyMarginBottom" style="color: #111928; font-weight: bold;" />
+						<Text text="View and manage all active fixed deposits." style="color: #6B7280; font-size: 0.85rem;" />
+					</VBox>
+
+					<HBox alignItems="Center">
+						<Button text="Template" icon="sap-icon://download" type="Transparent" press=".onDownloadTemplate" class="fdAdvBtn fdAdvBtnOutline"/>
+						<Button id="fdMassUploader" text="Mass Upload" icon="sap-icon://upload" type="Emphasized" press=".onMassUpload" class="fdAdvBtn fdAdvBtnBlue"/>
+						<Button text="New FD" icon="sap-icon://add" type="Emphasized" press=".onNavNewfd" class="fdAdvBtn" style="background-color: #0070F2; color: white; border: none;"/>
+						<Button text="Run Month-end" icon="sap-icon://business-objects-experience" type="Emphasized" press=".onRunMonthEnd" class="fdAdvBtn" style="background-color: #1D4ED8; color: white; border: none;"/>
+					</HBox>
+				</HBox>
+
+				<!-- KPI Cards Row -->
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBottom" width="100%">
+					
+					<VBox class="fdAdvKpiCard" width="24%">
+						<HBox alignItems="Center">
+							<VBox class="fdAdvKpiIconBox fdAdvKpiIconBlue">
+								<core:Icon src="sap-icon://money-bills" size="1.5rem"/>
+							</VBox>
+							<VBox width="100%">
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="{/metrics/activeCount}" class="fdAdvKpiValue" />
+									<HBox alignItems="Center"><core:Icon src="sap-icon://sys-enter-2" color="#059669" class="sapUiTinyMarginEnd" size="0.75rem"/><Text text="+12%" class="fdAdvKpiTrend fdAdvKpiTrendUp"/></HBox>
+								</HBox>
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="Active Fixed Deposits" class="fdAdvKpiLabel"/>
+									<Text text="vs last month" class="fdAdvKpiTrendLabel"/>
+								</HBox>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<VBox class="fdAdvKpiCard" width="24%">
+						<HBox alignItems="Center">
+							<VBox class="fdAdvKpiIconBox fdAdvKpiIconGreen">
+								<Text text="₹" style="font-size: 1.5rem; font-weight: bold;"/>
+							</VBox>
+							<VBox width="100%">
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="₹ {/totalFdCorpus}" class="fdAdvKpiValue" />
+									<HBox alignItems="Center"><core:Icon src="sap-icon://sys-enter-2" color="#059669" class="sapUiTinyMarginEnd" size="0.75rem"/><Text text="+8%" class="fdAdvKpiTrend fdAdvKpiTrendUp"/></HBox>
+								</HBox>
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="Total Principal Amount" class="fdAdvKpiLabel"/>
+									<Text text="vs last month" class="fdAdvKpiTrendLabel"/>
+								</HBox>
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%" class="sapUiTinyMarginTop" style="border-top: 1px dashed #E5E7EB; padding-top: 4px;">
+									<Text text="Lien: ₹ {/totalLienCorpus}" style="font-size: 0.75rem; color: #D97706; font-weight: 600;"/>
+									<Text text="Not Lien: ₹ {/totalNotLienCorpus}" style="font-size: 0.75rem; color: #059669; font-weight: 600;"/>
+								</HBox>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<VBox class="fdAdvKpiCard" width="24%">
+						<HBox alignItems="Center">
+							<VBox class="fdAdvKpiIconBox fdAdvKpiIconPurple">
+								<Text text="%" style="font-size: 1.5rem; font-weight: bold;"/>
+							</VBox>
+							<VBox width="100%">
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="{/avgInterestRate}%" class="fdAdvKpiValue" />
+									<HBox alignItems="Center"><core:Icon src="sap-icon://sys-minus" color="#DC2626" class="sapUiTinyMarginEnd" size="0.75rem"/><Text text="-0.2%" class="fdAdvKpiTrend fdAdvKpiTrendDown"/></HBox>
+								</HBox>
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="Average Interest Rate" class="fdAdvKpiLabel"/>
+									<Text text="vs last month" class="fdAdvKpiTrendLabel"/>
+								</HBox>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<VBox class="fdAdvKpiCard" width="24%">
+						<HBox alignItems="Center">
+							<VBox class="fdAdvKpiIconBox fdAdvKpiIconOrange">
+								<core:Icon src="sap-icon://calendar" size="1.5rem"/>
+							</VBox>
+							<VBox width="100%">
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="{/nextMaturityDate}" class="fdAdvKpiValue" />
+								</HBox>
+								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
+									<Text text="Next Maturity Date" class="fdAdvKpiLabel"/>
+								</HBox>
+							</VBox>
+						</HBox>
+					</VBox>
+
+				</HBox>
+
+				<!-- Table Section -->
+				<VBox class="fdAdvKpiCard" style="padding: 0; overflow: hidden;">
+					
+					<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%" class="sapUiSmallMargin">
+						<SegmentedButton
+							id="fdQuickFilterBar"
+							class="fdTabs"
+							selectedKey="{ui>/quickFilter}"
+							select=".onQuickFilterFD">
+							<items>
+								<SegmentedButtonItem text="All" key="all"/>
+								<SegmentedButtonItem text="Active" key="active"/>
+								<SegmentedButtonItem text="Matured" key="matured"/>
+								<SegmentedButtonItem text="Auto Renew" key="autoRenew"/>
+							</items>
+						</SegmentedButton>
+
+						<HBox alignItems="Center">
+							<SearchField
+								width="16rem"
+								placeholder="Search FD No, Bank, ..."
+								liveChange=".onSearchFD"
+								class="sapUiSmallMarginEnd"/>
+
+							<Button icon="sap-icon://filter" tooltip="Filter" type="Transparent" press=".onFilterFD" class="sapUiTinyMarginEnd" style="color: #6B7280;"/>
+							<Button icon="sap-icon://sort" tooltip="Sort" type="Transparent" press=".onSortFD" class="sapUiTinyMarginEnd" style="color: #6B7280;"/>
+							<Button icon="sap-icon://excel-attachment" tooltip="Export" type="Transparent" press=".onExportFD" class="sapUiTinyMarginEnd" style="color: #6B7280;"/>
+							<Button icon="sap-icon://refresh" tooltip="Refresh Table Data" type="Transparent" press=".onRefreshFDTable" class="sapUiTinyMarginEnd" style="color: #6B7280;"/>
+							<Button icon="sap-icon://full-screen" tooltip="Expand" type="Transparent" style="color: #6B7280;"/>
+						</HBox>
+					</HBox>
+
+					<Table growing="true" growingThreshold="100" growingScrollToLoad="true" items="{/fds}" class="fdDataTable" id="fdTable" mode="MultiSelect" backgroundDesign="Solid">
+						<columns>
+							<Column width="110px"><Text text="FD Number"/></Column>
+							<Column width="150px"><Text text="Bank"/></Column>
+							<Column width="130px" hAlign="End"><Text text="Principal (INR)"/></Column>
+							<Column width="130px" hAlign="End"><Text text="Lien Amount (INR)"/></Column>
+							<Column width="140px" hAlign="End"><Text text="Not Lien Amount (INR)"/></Column>
+							<Column width="100px" hAlign="Center"><Text text="Rate"/></Column>
+							<Column width="110px"><Text text="Start Date"/></Column>
+							<Column width="120px"><Text text="Creation Date"/></Column>
+							<Column width="120px"><Text text="Maturity Date"/></Column>
+							<Column width="110px" hAlign="Center"><Text text="Status"/></Column>
+							<Column width="130px"><Text text="Accounting Doc"/></Column>
+							<Column width="140px"><Text text="Renewal Document"/></Column>
+							<Column width="120px"><Text text="Renewal Date"/></Column>
+							<Column width="130px" hAlign="End"><Text text="Renewal Amount"/></Column>
+							<Column width="130px" hAlign="Center"><Text text="Auto-renew"/></Column>
+							<Column width="90px" hAlign="Center"><Text text="Actions"/></Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<ObjectIdentifier title="{id}"/>
+									<Text text="{bank}" style="font-weight: 500; color: #374151;"/>
+									<ObjectNumber number="{principalText}" class="fdMono"/>
+									<ObjectNumber number="{lienAmtText}" class="fdMono" state="Warning"/>
+									<ObjectNumber number="{notLienAmtText}" class="fdMono" state="Success"/>
+									<Text text="{rateText}" class="fdMono"/>
+									<Text text="{startText}"/>
+									<Text text="{creationDateText}"/>
+									<Text text="{maturityText}"/>
+									<ObjectStatus text="{statusText}" state="{statusState}"/>
+									<Link text="{fdDocNoText}" press=".onDisplayJournalEntry" class="fdMono"/>
+									<Link text="{renewalDocNoText}" press=".onDisplayJournalEntry" class="fdMono"/>
+									<Text text="{renewalDateText}"/>
+									<Text text="{renewalAmtText}" class="fdMono"/>
+									<ObjectStatus text="{autoRenewText}" icon="{autoRenewIcon}" state="{autoRenewState}"/>
+									<Button icon="sap-icon://navigation-right-arrow" type="Transparent" press=".onOpenMaturity" tooltip="Actions"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+					
+				</VBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

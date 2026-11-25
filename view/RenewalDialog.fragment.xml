@@ -1,0 +1,185 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout">
+	<Dialog title="FD Auto Renewal" contentWidth="900px" resizable="false" showHeader="false" class="fdCustomDialog">
+		<content>
+			<VBox class="sapUiLargeMargin" style="margin: 32px;">
+				
+				<!-- Top Header Area -->
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBottom">
+					<VBox>
+						<Title text="FD Auto Renewal" class="fdRenewalHeaderTitle" />
+						<Text text="Option 1 : New FD No." class="fdRenewalHeaderSub sapUiTinyMarginTop" />
+					</VBox>
+					<Button icon="sap-icon://decline" type="Transparent" press=".onCloseRenewalDialog" />
+				</HBox>
+				
+				<!-- Mock wizard header -->
+				<HBox justifyContent="Center" alignItems="Center" width="100%" class="sapUiLargeMarginBottom">
+					<HBox alignItems="Center">
+						<Text text="1" class="fdWizardStepActiveIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Renewal Details" class="fdWizardStepTitle" />
+							<Text text="Enter new FD details" class="fdWizardStepSub" />
+						</VBox>
+					</HBox>
+					<core:HTML content="&lt;div class='fdWizardLine'&gt;&lt;/div&gt;" />
+					<HBox alignItems="Center">
+						<Text text="2" class="fdWizardStepInactiveIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Review" class="fdWizardStepTitle" />
+							<Text text="Verify information" class="fdWizardStepSub" />
+						</VBox>
+					</HBox>
+					<core:HTML content="&lt;div class='fdWizardLine'&gt;&lt;/div&gt;" />
+					<HBox alignItems="Center">
+						<Text text="3" class="fdWizardStepInactiveIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Confirmation" class="fdWizardStepTitle" />
+							<Text text="Renewal successful" class="fdWizardStepSub" />
+						</VBox>
+					</HBox>
+				</HBox>
+				
+				<HBox width="100%" justifyContent="SpaceBetween">
+					<!-- Left Panel -->
+					<VBox width="48%" class="sapUiMediumMarginEnd sapUiContentPadding fdPanel">
+						<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+							<core:Icon src="sap-icon://document-text" color="#0070F2" size="1.2rem" />
+							<Title text="Current FD Details (Automatic)" class="fdPanelHeaderTitle" />
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="FD Account Number" class="fdPanelLabel" />
+							<Text text="{renew>/currentFdNo}" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="Bank Name" class="fdPanelLabel" />
+							<Text text="{renew>/bankName}" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="Principal Amount" class="fdPanelLabel" />
+							<Text text="₹ {renew>/principalAmountFormatted}" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="FD Tenure (Months)" class="fdPanelLabel" />
+							<Text text="{renew>/currentTenure}" class="fdPanelValue" />
+						</HBox>
+						<!--<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="Calculated Tenure Till Date" class="fdPanelLabel" />
+							<Text text="{renew>/calculatedTenure} Months" class="fdPanelValue" />
+						</HBox>-->
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="Interest Rate" class="fdPanelLabel" />
+							<Text text="{renew>/currentFdRate}%" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<VBox>
+								<Text text="Total Interest Amount" class="fdPanelLabel" />
+								<Text text="{renew>/interestCalculationText}" class="sapUiTinyMarginTop" style="font-size: 0.75rem; color: #666;" />
+							</VBox>
+							<Text text="₹ {renew>/systemInterestFormatted}" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+							<Text text="Total FD Value till now" class="fdPanelLabel" />
+							<Text text="₹ {renew>/totalFdValueFormatted}" class="fdPanelValue" />
+						</HBox>
+						<HBox justifyContent="SpaceBetween">
+							<Text text="Maturity Date" class="fdPanelLabel" />
+							<Text text="{renew>/startDate}" class="fdPanelValue" />
+						</HBox>
+						
+						<!-- Info Strip -->
+						<HBox alignItems="Center" class="fdInfoStripGreen">
+							<core:Icon src="sap-icon://information" class="fdInfoStripGreenIcon" />
+							<Text text="This FD is maturing on {renew>/startDate}." class="fdInfoStripGreenText" />
+						</HBox>
+					</VBox>
+					
+					<!-- Right Panel -->
+					<VBox width="48%" class="sapUiContentPadding fdPanel">
+						<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+							<core:Icon src="sap-icon://edit" color="#0070F2" size="1.2rem" />
+							<Title text="Renewal Details (Manual)" class="fdPanelHeaderTitle" />
+						</HBox>
+						
+						<!-- Form Rows -->
+						<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+							<HBox>
+								<Text text="Total Interest Amount" class="fdPanelLabel" />
+								<Text text="*" class="fdAsterisk sapUiTinyMarginBegin" />
+							</HBox>
+							<HBox alignItems="Center" width="14rem">
+								<Input value="{renew>/totalInterestBank}" type="Number" width="12rem" class="fdInputWrapper" liveChange=".onCalculateNewFdValue" />
+								<Text text="₹" class="fdInputSuffix" />
+							</HBox>
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+							<Text text="TDS Applicable" class="fdPanelLabel" />
+							<HBox width="14rem" justifyContent="Start">
+								<Switch state="{renew>/tdsInd}" change=".onCalculateNewFdValue" customTextOn="ON" customTextOff="OFF" />
+							</HBox>
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+							<Text text="TDS Amount" class="fdPanelLabel" />
+							<HBox alignItems="Center" width="14rem">
+								<Input value="{renew>/tdsAmount}" type="Number" width="12rem" class="fdInputWrapper" liveChange=".onCalculateNewFdValue" enabled="{renew>/tdsInd}" />
+								<Text text="₹" class="fdInputSuffix" />
+							</HBox>
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+							<HBox>
+								<Text text="Proposed FD interest Rate" class="fdPanelLabel" />
+								<Text text="*" class="fdAsterisk sapUiTinyMarginBegin" />
+							</HBox>
+							<HBox alignItems="Center" width="14rem">
+								<Input value="{renew>/proposedRate}" type="Number" width="12rem" class="fdInputWrapper" />
+								<Text text="%" class="fdInputSuffix" />
+							</HBox>
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+							<HBox>
+								<Text text="Renewal Tenure" class="fdPanelLabel" />
+								<Text text="*" class="fdAsterisk sapUiTinyMarginBegin" />
+							</HBox>
+							<HBox alignItems="Center" wrap="NoWrap">
+								<Input value="{renew>/tenorYears}" type="Number" class="fdInputWrapper" width="2.6rem" liveChange=".onCalculateNewFdValue" placeholder="0" />
+								<Text text="Years" class="fdInputSuffix sapUiTinyMarginEnd" style="margin-left: 4px !important;" />
+								<Input value="{renew>/tenorMonths}" type="Number" class="fdInputWrapper" width="2.6rem" liveChange=".onCalculateNewFdValue" placeholder="0" />
+								<Text text="Months" class="fdInputSuffix sapUiTinyMarginEnd" style="margin-left: 4px !important;" />
+								<Input value="{renew>/tenorDays}" type="Number" class="fdInputWrapper" width="2.6rem" liveChange=".onCalculateNewFdValue" placeholder="0" />
+								<Text text="Days" class="fdInputSuffix" style="margin-left: 4px !important;" />
+							</HBox>
+						</HBox>
+						
+						<HBox justifyContent="SpaceBetween" alignItems="Center">
+							<Text text="FD Start Date" class="fdPanelLabel" />
+							<HBox width="14rem">
+								<DatePicker value="{renew>/startDate}" displayFormat="dd MMM yyyy" enabled="false" width="12rem" class="fdInputWrapper" />
+							</HBox>
+						</HBox>
+						
+						<!-- Info Strip -->
+						<HBox alignItems="Center" class="fdInfoStripBlue">
+							<core:Icon src="sap-icon://information" class="fdInfoStripBlueIcon" />
+							<Text text="A new FD will be created with the above details after maturity on {renew>/startDate}." class="fdInfoStripBlueText" />
+						</HBox>
+					</VBox>
+				</HBox>
+			</VBox>
+			
+			<!-- Custom Footer -->
+			<HBox width="100%" justifyContent="End" alignItems="Center" class="fdActionFooter">
+				<Button text="Cancel" press=".onCloseRenewalDialog" class="fdBtnCancel sapUiSmallMarginEnd" />
+				<Button text="Auto Renew" press=".onSubmitAutoRenew" class="fdBtnSubmit" />
+			</HBox>
+			
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

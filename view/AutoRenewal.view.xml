@@ -1,0 +1,206 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.AutoRenewal"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true">
+	<Page showHeader="false" class="fdPage">
+		<content>
+			<html:style>
+				.arKpiGrid { gap: 16px; margin-bottom: 24px; }
+				.arKpiCard {
+					background: #ffffff;
+					border: 1px solid #eef1f6;
+					border-radius: 12px;
+					padding: 20px;
+					box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+					transition: transform 0.2s ease, box-shadow 0.2s ease;
+					flex: 1;
+				}
+				.arKpiCard:hover {
+					transform: translateY(-2px);
+					box-shadow: 0 8px 16px rgba(16, 24, 40, 0.08);
+				}
+				.arKpiIconBox {
+					width: 52px;
+					height: 52px;
+					border-radius: 12px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-right: 16px;
+				}
+				.arKpiIconBox .sapUiIcon { font-size: 24px; }
+				.arKpiIconBoxText { font-size: 24px; font-weight: bold; font-family: 'Inter', sans-serif; }
+				
+				.arKpiBlue { background: #eff6ff; color: #2563eb; }
+				.arKpiBlue .sapUiIcon { color: #2563eb; }
+				
+				.arKpiGreen { background: #f0fdf4; color: #16a34a; }
+				.arKpiGreen .sapUiIcon { color: #16a34a; }
+				
+				.arKpiPurple { background: #faf5ff; color: #9333ea; }
+				.arKpiPurple .sapUiIcon { color: #9333ea; }
+				
+				.arKpiOrange { background: #fff7ed; color: #ea580c; }
+				.arKpiOrange .sapUiIcon { color: #ea580c; }
+
+				.arKpiValue {
+					font-size: 20px;
+					font-weight: 800;
+					color: #101828;
+					line-height: 1.2;
+					margin-bottom: 4px;
+					font-variant-numeric: tabular-nums;
+				}
+				.arKpiLabel {
+					font-size: 13px;
+					font-weight: 500;
+					color: #66738a;
+					line-height: 1.4;
+				}
+				.arKpiSubLabel {
+					font-size: 12px;
+					color: #2563eb;
+					font-weight: 500;
+				}
+				.arTableCard {
+					background: #ffffff;
+					border-radius: 12px;
+					border: 1px solid #eef1f6;
+					box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+					padding: 12px;
+				}
+			</html:style>
+			<VBox class="sapUiMediumMargin">
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+					<VBox>
+						<Title text="Fixed Deposit Renewal" level="H2" class="sapUiTinyMarginBottom" />
+						<Text text="Select a Fixed Deposit to initiate auto-renewal." />
+					</VBox>
+					<HBox alignItems="Center">
+						<core:Icon src="sap-icon://calendar" class="sapUiTinyMarginEnd"/>
+						<Select id="headerRenewalMonthSelect"
+							selectedKey="{/selectedRenewalMonthKey}"
+							change=".onMonthFilterChange"
+							items="{/renewalMonths}"
+							autoAdjustWidth="true">
+							<core:Item key="{key}" text="{text}" />
+						</Select>
+					</HBox>
+				</HBox>
+				
+				<!-- KPI Cards -->
+				<HBox class="arKpiGrid sapUiSmallMarginBottom" fitContainer="true" width="100%">
+					
+					<!-- Maturing This Month -->
+					<HBox class="arKpiCard" alignItems="Center">
+						<VBox class="arKpiIconBox arKpiBlue">
+							<core:Icon src="sap-icon://money-bills" />
+						</VBox>
+						<VBox>
+							<Text text="{/maturingThisMonth}" class="arKpiValue"/>
+							<Text text="Fixed Deposits" class="arKpiLabel"/>
+							<Text text="Maturing this month" class="arKpiSubLabel"/>
+						</VBox>
+					</HBox>
+
+					<!-- Total Principal Amount -->
+					<HBox class="arKpiCard" alignItems="Center">
+						<VBox class="arKpiIconBox arKpiGreen">
+							<core:Icon src="sap-icon://lead" />
+						</VBox>
+						<VBox>
+							<Text text="₹ {/totalFdCorpus}" class="arKpiValue"/>
+							<Text text="Total Principal Amount" class="arKpiLabel"/>
+							<Text text="Lien: ₹ {/totalLienCorpus} | Not Lien: ₹ {/totalNotLienCorpus}" class="arKpiSubLabel" style="font-size: 0.72rem; color: #4B5563; font-weight: 600;"/>
+						</VBox>
+					</HBox>
+
+					<!-- Average Interest Rate -->
+					<HBox class="arKpiCard" alignItems="Center">
+						<VBox class="arKpiIconBox arKpiPurple">
+							<Text text="%" class="arKpiIconBoxText" />
+						</VBox>
+						<VBox>
+							<Text text="{/avgInterestRate}%" class="arKpiValue"/>
+							<Text text="Average Interest Rate" class="arKpiLabel"/>
+						</VBox>
+					</HBox>
+
+					<!-- Next Maturity Date -->
+					<HBox class="arKpiCard" alignItems="Center">
+						<VBox class="arKpiIconBox arKpiOrange">
+							<core:Icon src="sap-icon://calendar" />
+						</VBox>
+						<VBox>
+							<Text text="{/nextMaturityDate}" class="arKpiValue"/>
+							<Text text="Next Maturity Date" class="arKpiLabel"/>
+						</VBox>
+					</HBox>
+				</HBox>
+
+				<VBox class="arTableCard sapUiSmallMarginTop">
+					<Table id="autoRenewalTable"
+						items="{/autoRenewalFds}"
+						mode="SingleSelectLeft"
+						selectionChange=".onSelectAutoRenewalFd"
+						alternateRowColors="true">
+						<headerToolbar>
+							<Toolbar style="background: transparent; border-bottom: 1px solid #eef1f6; height: 50px;">
+								<Text text="Fixed Deposits (Available for Auto Renewal)" style="font-size: 16px; font-weight: 700; color: #101828;" />
+								<ToolbarSpacer />
+								<Label text="Maturity Month:" design="Bold" class="sapUiTinyMarginEnd" />
+								<Select id="renewalMonthSelect"
+									selectedKey="{/selectedRenewalMonthKey}"
+									change=".onMonthFilterChange"
+									items="{/renewalMonths}"
+									width="11rem"
+									class="sapUiSmallMarginEnd">
+									<core:Item key="{key}" text="{text}" />
+								</Select>
+								<SearchField width="18rem" placeholder="Search by FD No. or Bank Name..." class="sapUiSmallMarginEnd" liveChange=".onSearchAutoRenewal" />
+								<Button icon="sap-icon://filter" type="Transparent" />
+								<Button icon="sap-icon://menu2" type="Transparent" />
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column>
+								<Text text="FD Account Number" />
+							</Column>
+							<Column>
+								<Text text="Bank Name" />
+							</Column>
+							<Column hAlign="End">
+								<Text text="Principal Amount" />
+							</Column>
+							<Column hAlign="End">
+								<Text text="Interest Rate" />
+							</Column>
+							<Column hAlign="End">
+								<Text text="Maturity Date" />
+							</Column>
+							<Column hAlign="Center">
+								<Text text="Status" />
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem type="Active">
+								<cells>
+									<Text text="{id}" />
+									<Text text="{bank}" />
+									<Text text="₹ {principalText}" />
+									<Text text="{rateText}" />
+									<Text text="{maturityText}" />
+									<ObjectStatus text="{= ${status} === 'matured' ? 'Matured' : (${daysLeft} &lt;= 10 ? 'Maturing Soon' : 'Active') }" state="{= ${status} === 'matured' ? 'Warning' : (${daysLeft} &lt;= 10 ? 'Warning' : 'Success') }" inverted="true" />
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</VBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,341 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.LegacyFD"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns="sap.m"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true">
+
+	<Page showHeader="false" class="fdPage">
+		<content>
+			<html:style>
+				.nfdWizardStepIcon { background-color: #9CA3AF; color: white; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; display: inline-block; font-weight: bold; font-size: 1rem; }
+				.nfdWizardStepActiveIcon { background-color: #0070F2; color: white; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; display: inline-block; font-weight: bold; font-size: 1rem; }
+				.nfdWizardStepTitle { color: #111928; font-weight: 700; font-size: 0.95rem; }
+				.nfdWizardStepSub { color: #6b7280; font-size: 0.8rem; }
+				.nfdWizardLine { border-top: 2px solid #E5E7EB; width: 80px; margin: 0 16px; display: inline-block; }
+				.nfdPanel { background: #ffffff; border-radius: 12px; border: 1px solid #eef1f6; box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04); padding: 20px; }
+				.nfdPanelHeaderTitle { color: #111928; font-weight: bold; font-size: 1.1rem; }
+				.nfdPanelLabel { color: #4B5563; font-size: 0.85rem; }
+				.nfdPanelValue { font-weight: 700; color: #111928; font-size: 0.9rem; }
+				
+				.nfdInfoStripGreen { background-color: #ECFDF5; padding: 12px; border-radius: 8px; margin-top: 16px; }
+				.nfdInfoStripGreenText { color: #065F46; font-size: 0.85rem; font-weight: bold; }
+				.nfdInfoStripBlue { background-color: #EFF6FF; padding: 12px; border-radius: 8px; margin-top: 16px; }
+				.nfdInfoStripBlueText { color: #1E3A8A; font-size: 0.85rem; }
+				.nfdAsterisk { color: #E02424; }
+				.nfdActionFooter { background-color: #ffffff; border-top: 1px solid #E5E7EB; padding: 16px 24px; }
+				.nfdBtnCancel { background-color: white; border: 1px solid #D1D5DB; color: #4B5563; border-radius: 6px; padding: 0 24px; font-weight: bold; }
+				.nfdBtnDraft { background-color: white; border: 1px solid #0070F2; color: #0070F2; border-radius: 6px; padding: 0 24px; font-weight: bold; }
+				.nfdBtnSubmit { background-color: #0070F2; color: white; border-radius: 6px; padding: 0 24px; font-weight: bold; }
+				
+				.nfdInputLabel { font-size: 0.85rem; color: #4B5563; margin-bottom: 4px; display: block; }
+			</html:style>
+
+			<VBox class="sapUiMediumMargin">
+				
+				<!-- Header -->
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+					<HBox alignItems="Center">
+						<Button icon="sap-icon://nav-back" type="Transparent" press=".onNavBack" class="sapUiSmallMarginEnd"/>
+						<VBox>
+							<Title text="Post Legacy Fixed Deposit" level="H2" class="sapUiTinyMarginBottom" />
+							<Text text="Create and configure a legacy fixed deposit and assign GL mapping." class="nfdPanelLabel"/>
+						</VBox>
+					</HBox>
+					<HBox alignItems="Center">
+						<Text text="Period: FY 2026-27" class="nfdPanelLabel sapUiSmallMarginEnd" />
+						<core:Icon src="sap-icon://calendar" color="#0070F2" size="1.2rem"/>
+					</HBox>
+				</HBox>
+
+				<!-- Wizard Header -->
+				<HBox justifyContent="Center" alignItems="Center" width="100%" class="nfdPanel sapUiLargeMarginBottom">
+					<HBox alignItems="Center">
+						<Text text="1" class="nfdWizardStepActiveIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Legacy FD Details" class="nfdWizardStepTitle" />
+							<Text text="Basic information" class="nfdWizardStepSub" />
+						</VBox>
+					</HBox>
+					<core:HTML content="&lt;div class='nfdWizardLine'&gt;&lt;/div&gt;" />
+					<HBox alignItems="Center">
+						<Text text="2" class="nfdWizardStepIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Terms &amp; Interest" class="nfdWizardStepTitle" />
+							<Text text="Tenure and maturity" class="nfdWizardStepSub" />
+						</VBox>
+					</HBox>
+					<core:HTML content="&lt;div class='nfdWizardLine'&gt;&lt;/div&gt;" />
+					<HBox alignItems="Center">
+						<Text text="3" class="nfdWizardStepIcon sapUiSmallMarginEnd" />
+						<VBox>
+							<Text text="Accounting Assignment" class="nfdWizardStepTitle" />
+							<Text text="GL assignment and preferences" class="nfdWizardStepSub" />
+						</VBox>
+					</HBox>
+				</HBox>
+
+				<!-- Main Content -->
+				<HBox width="100%" justifyContent="SpaceBetween">
+					
+					<!-- Left Column -->
+					<VBox width="66%">
+						
+						<!-- General Information -->
+						<VBox class="nfdPanel sapUiMediumMarginBottom">
+							<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+								<VBox class="arKpiIconBox arKpiBlue" style="width: 40px; height: 40px;">
+									<core:Icon src="sap-icon://building" size="1.2rem"/>
+								</VBox>
+								<VBox>
+									<Title text="General Information" class="nfdPanelHeaderTitle"/>
+									<Text text="Enter the basic details for the legacy fixed deposit." class="nfdPanelLabel"/>
+								</VBox>
+							</HBox>
+							
+							<HBox width="100%" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+								<VBox width="48%">
+									<HBox><Text text="Company Code " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/coCode}" placeholder="1000" showValueHelp="true" valueHelpRequest=".onLegacyCompanyCodeValueHelp"/>
+								</VBox>
+								<VBox width="48%">
+									<HBox><Text text="Bank " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/bank}" placeholder="Bank name" showValueHelp="true" valueHelpRequest=".onLegacyBankNameValueHelp"/>
+								</VBox>
+							</HBox>
+							<HBox width="100%" justifyContent="SpaceBetween">
+								<VBox width="48%">
+									<HBox><Text text="FD Number " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/id}" placeholder="00001"/>
+								</VBox>
+								<VBox width="48%">
+									<HBox><Text text="Purpose of FD " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/openingFd}" placeholder="Enter purpose"/>
+								</VBox>
+							</HBox>
+						</VBox>
+
+						<!-- Terms & Interest Details -->
+						<VBox class="nfdPanel sapUiMediumMarginBottom">
+							<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+								<VBox class="arKpiIconBox arKpiBlue" style="width: 40px; height: 40px;">
+									<Text text="%" style="font-size:1.2rem; font-weight:bold; color:#2563eb;"/>
+								</VBox>
+								<VBox>
+									<Title text="Terms &amp; Interest Details" class="nfdPanelHeaderTitle"/>
+									<Text text="Specify the amount, interest rate and tenure of the legacy fixed deposit." class="nfdPanelLabel"/>
+								</VBox>
+							</HBox>
+
+							<HBox width="100%" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+								<VBox width="48%">
+									<HBox><Text text="Principal Amount " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/principal}" type="Number" placeholder="100000" description="₹" fieldWidth="85%" liveChange=".onLegacyPrincipalChange" change=".onLegacyPrincipalChange"/>
+								</VBox>
+								<VBox width="48%">
+									<HBox><Text text="Start Date " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<DatePicker value="{legacyFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy" change=".onLegacyMaturityChange"/>
+								</VBox>
+							</HBox>
+
+							<HBox width="100%" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+								<VBox width="48%">
+									<HBox><Text text="Lien Amount " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/lienAmt}" type="Number" placeholder="0" description="₹" fieldWidth="85%" valueState="{legacyFd>/lienValueState}" valueStateText="{legacyFd>/lienValueStateText}" liveChange=".onLegacyLienAmountChange" change=".onLegacyLienAmountChange"/>
+								</VBox>
+								<VBox width="48%">
+									<HBox><Text text="Not Lien Amount (Calculated) " class="nfdInputLabel"/></HBox>
+									<Input value="{legacyFd>/notLienAmt}" type="Number" editable="false" description="₹" fieldWidth="85%"/>
+								</VBox>
+							</HBox>
+
+							<HBox width="100%" justifyContent="SpaceBetween" class="sapUiMediumMarginBottom">
+								<VBox width="48%">
+									<HBox><Text text="Annual Interest Rate (%) " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Input value="{legacyFd>/rate}" type="Number" placeholder="7.50"/>
+								</VBox>
+								<VBox width="48%">
+									<HBox><Text text="Maturity Date " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<DatePicker value="{legacyFd>/maturityDate}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy" change=".onLegacyMaturityChange"/>
+								</VBox>
+							</HBox>
+
+							<HBox width="100%" justifyContent="SpaceBetween" class="sapUiMediumMarginBottom">
+								<VBox width="48%">
+									<HBox><Text text="Compounding " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+									<Select selectedKey="{legacyFd>/freq}" width="100%">
+										<items>
+											<core:Item key="12" text="Monthly"/>
+											<core:Item key="4" text="Quarterly"/>
+											<core:Item key="2" text="Half-yearly"/>
+											<core:Item key="1" text="Yearly"/>
+										</items>
+									</Select>
+								</VBox>
+								<VBox width="48%">
+								</VBox>
+							</HBox>
+
+							<HBox alignItems="Center" class="nfdInfoStripGreen" width="100%">
+								<HBox width="50%" alignItems="Center">
+									<Text text="Calculated Tenor" class="nfdPanelLabel sapUiMediumMarginEnd" />
+									<core:Icon src="sap-icon://calendar" color="#059669" class="sapUiTinyMarginEnd"/>
+									<Text text="{legacyFd>/tenorText}" class="nfdInfoStripGreenText"/>
+								</HBox>
+								<HBox width="50%" alignItems="Center">
+									<core:Icon src="sap-icon://information" color="#0070F2" class="sapUiTinyMarginEnd"/>
+									<Text text="Tenor is calculated automatically based on start and maturity date." class="nfdPanelLabel" style="font-size: 0.75rem;"/>
+								</HBox>
+							</HBox>
+						</VBox>
+
+						<!-- Accounting Assignment -->
+						<VBox class="nfdPanel sapUiMediumMarginBottom">
+							<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+								<VBox class="arKpiIconBox arKpiBlue" style="width: 40px; height: 40px;">
+									<core:Icon src="sap-icon://document-text" size="1.2rem"/>
+								</VBox>
+								<VBox>
+									<Title text="Accounting Assignment" class="nfdPanelHeaderTitle"/>
+									<Text text="Maintain the GL mapping and Costing assignments." class="nfdPanelLabel"/>
+								</VBox>
+							</HBox>
+							
+							<HBox width="100%" justifyContent="SpaceBetween">
+								<VBox width="48%">
+									<Title text="GL Mapping" level="H4" class="sapUiSmallMarginBottom" />
+									
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+										<HBox><Text text="FD Principal GL " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+										<Input value="{legacyFd>/glP}" width="12rem" placeholder="110000" showValueHelp="true" valueHelpRequest=".onLegacyGlPrincipalValueHelp"/>
+									</HBox>
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+										<HBox><Text text="Bank GL " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+										<Input value="{legacyFd>/bankGL}" width="12rem" placeholder="Select GL account" showValueHelp="true" enabled="false" valueHelpRequest=".onLegacyBankGlValueHelp"/>
+									</HBox>
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+										<HBox><Text text="Interest Receivable GL " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+										<Input value="{legacyFd>/glI}" width="12rem" placeholder="120000" showValueHelp="true" valueHelpRequest=".onLegacyGlReceivableValueHelp"/>
+									</HBox>
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+										<HBox><Text text="Interest Income GL " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+										<Input value="{legacyFd>/glInc}" width="12rem" placeholder="410000" showValueHelp="true" valueHelpRequest=".onLegacyGlIncomeValueHelp"/>
+									</HBox>
+								</VBox>
+								
+								<VBox width="48%">
+									<Title text="Costing" level="H4" class="sapUiSmallMarginBottom" />
+									
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+										<HBox><Text text="Profit Center " class="nfdInputLabel"/><Text text="*" class="nfdAsterisk"/></HBox>
+										<Input value="{legacyFd>/profitCenter}" width="12rem" placeholder="PC100" showValueHelp="true" valueHelpRequest=".onLegacyProfitCenterValueHelp"/>
+									</HBox>
+									
+									<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom" visible="{= ${legacyFd>/fdDocNo} ? true : false}">
+										<Text text="Generated Document " class="nfdInputLabel" style="color: #059669; font-weight: bold;"/>
+										<Input value="{legacyFd>/fdDocNo}" width="12rem" editable="false" style="font-weight: bold; color: #059669;"/>
+									</HBox>
+								</VBox>
+							</HBox>
+						</VBox>
+
+					</VBox>
+
+					<!-- Right Column (Summary) -->
+					<VBox width="32%">
+						<VBox class="nfdPanel">
+							<HBox alignItems="Center" class="sapUiMediumMarginBottom">
+								<VBox class="arKpiIconBox arKpiBlue" style="width: 40px; height: 40px;">
+									<core:Icon src="sap-icon://money-bills" size="1.2rem"/>
+								</VBox>
+								<VBox>
+									<Title text="Legacy FD Summary" class="nfdPanelHeaderTitle"/>
+									<Text text="Real-time summary based on entered details." class="nfdPanelLabel" style="font-size: 0.75rem;"/>
+								</VBox>
+							</HBox>
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://building" color="#4B5563" class="sapUiSmallMarginEnd"/><Text text="Company Code" class="nfdPanelLabel"/></HBox>
+								<Text text="{legacyFd>/coCode}" class="nfdPanelValue"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://official-service" color="#4B5563" class="sapUiSmallMarginEnd"/><Text text="Bank" class="nfdPanelLabel"/></HBox>
+								<Text text="{legacyFd>/bank}" class="nfdPanelValue"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><Text text="₹" style="color: #4B5563; font-weight: bold;" class="sapUiSmallMarginEnd"/><Text text="Principal Amount" class="nfdPanelLabel"/></HBox>
+								<Text text="₹ {legacyFd>/principal}" class="nfdPanelValue"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://locked" color="#D97706" class="sapUiSmallMarginEnd"/><Text text="Lien Amount" class="nfdPanelLabel"/></HBox>
+								<Text text="₹ {legacyFd>/lienAmt}" class="nfdPanelValue" style="color: #D97706;"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://unlocked" color="#059669" class="sapUiSmallMarginEnd"/><Text text="Not Lien Amount" class="nfdPanelLabel"/></HBox>
+								<Text text="₹ {legacyFd>/notLienAmt}" class="nfdPanelValue" style="color: #059669;"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><Text text="%" style="color: #4B5563; font-weight: bold;" class="sapUiSmallMarginEnd"/><Text text="Interest Rate" class="nfdPanelLabel"/></HBox>
+								<Text text="{legacyFd>/rate}%" class="nfdPanelValue"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://appointment" color="#4B5563" class="sapUiSmallMarginEnd"/><Text text="Calculated Tenor" class="nfdPanelLabel"/></HBox>
+								<Text text="{legacyFd>/tenorText}" class="nfdPanelValue" style="font-size: 0.8rem;"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://calendar" color="#4B5563" class="sapUiSmallMarginEnd"/><Text text="Start Date" class="nfdPanelLabel"/></HBox>
+								<Text text="{legacyFd>/start}" class="nfdPanelValue"/>
+							</HBox>
+							<core:HTML content="&lt;hr style='border: none; border-top: 1px solid #eef1f6; margin-bottom: 12px;'/&gt;" />
+							
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom" style="background-color: #ECFDF5; padding: 6px; border-radius: 4px;">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://calendar" color="#059669" class="sapUiSmallMarginEnd"/><Text text="Maturity Date" class="nfdPanelLabel" style="color: #065F46;"/></HBox>
+								<Text text="{legacyFd>/maturityDate}" class="nfdPanelValue" style="color: #065F46;"/>
+							</HBox>
+
+							<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom" style="background-color: #EFF6FF; padding: 6px; border-radius: 4px; border: 1px dashed #2563eb;" visible="{= ${legacyFd>/fdDocNo} ? true : false}">
+								<HBox alignItems="Center"><core:Icon src="sap-icon://document" color="#1D4ED8" class="sapUiSmallMarginEnd"/><Text text="Accounting Doc" class="nfdPanelLabel" style="color: #1E3A8A; font-weight: bold;"/></HBox>
+								<Text text="{legacyFd>/fdDocNo}" class="nfdPanelValue" style="color: #1E3A8A; font-weight: bold; font-size: 1.1rem;"/>
+							</HBox>
+
+							<HBox alignItems="Center" class="nfdInfoStripBlue">
+								<core:Icon src="sap-icon://information" class="nfdInfoStripBlueIcon" style="margin-right: 12px; font-size: 1.2rem; color: #1D4ED8;"/>
+								<Text text="Posting the Legacy FD will generate the corresponding accounting document." class="nfdInfoStripBlueText" />
+							</HBox>
+						</VBox>
+					</VBox>
+
+				</HBox>
+			</VBox>
+
+		</content>
+
+		<!-- Custom Footer -->
+		<footer>
+			<Toolbar class="nfdActionFooter">
+				<Text text="{legacyFd>/message}" class="fdFormMessage"/>
+				<ToolbarSpacer/>
+				<Button text="Cancel" press=".onNavBack" class="nfdBtnCancel sapUiSmallMarginEnd" />
+				<Button text="Save as Draft" class="nfdBtnDraft sapUiSmallMarginEnd" />
+				<Button text="Post Legacy FD →" press=".onPostLegacyFD" class="nfdBtnSubmit" />
+			</Toolbar>
+		</footer>
+
+	</Page>
+</mvc:View>
