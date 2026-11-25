@@ -19,7 +19,8 @@ sap.ui.define([
 	"../util/Frequency",
 	"../util/ODataErrorHandler",
 	"../service/FdDetailsService"
-], function(Controller, JSONModel, MessageBox, MessageToast, SelectDialog, StandardListItem, CustomData, Filter, FilterOperator, Sorter, BusyIndicator, ActionSheet, Dialog, Button, CheckBox, VBox, Spreadsheet, Frequency, ODataErrorHandler, FdDetailsService) {
+], function(Controller, JSONModel, MessageBox, MessageToast, SelectDialog, StandardListItem, CustomData, Filter, FilterOperator, Sorter,
+	BusyIndicator, ActionSheet, Dialog, Button, CheckBox, VBox, Spreadsheet, Frequency, ODataErrorHandler, FdDetailsService) {
 	"use strict";
 
 	return Controller.extend("com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.BaseController", {
@@ -29,12 +30,12 @@ sap.ui.define([
 		// BaseController.prototype.onInit.apply(this, arguments) (or simply
 		// this.initializeApplication()) itself, otherwise this one is skipped.
 		onInit: function() {
-			
+
 			this.initializeApplication();
 		},
 
 		initializeApplication: function() {
-		
+
 			this._fds = [];
 			this._entries = [];
 			this._f4Cache = {};
@@ -74,18 +75,42 @@ sap.ui.define([
 			this._attachKpiCardHandlers();
 		},
 
-		onNavDashboard: function() { this._setPage("dashboard"); },
-		onNavFds: function() { this._setPage("fds"); },
-		onNavInterest: function() { this._setPage("interest"); },
-		onNavMaturity: function() { this._setPage("maturity"); },
-		onNavMaturityAlerts: function() { this._setPage("maturityAlerts"); },
-		onNavMaturityCalendar: function() { this._setPage("maturityCalendar"); },
-		onNavAccounting: function() { this._setPage("accounting"); },
-		onNavMonthEnd: function() { this._setPage("monthEnd"); },
-		onNavNewfd: function() { this._setPage("newfd"); },
-		onNavLegacyFd: function() { this._setPage("legacyfd"); },
-		onNavAutoRenewal: function() { this._setPage("autoRenewal"); },
-		onNavSettings: function() { this._setPage("settings"); },
+		onNavDashboard: function() {
+			this._setPage("dashboard");
+		},
+		onNavFds: function() {
+			this._setPage("fds");
+		},
+		onNavInterest: function() {
+			this._setPage("interest");
+		},
+		onNavMaturity: function() {
+			this._setPage("maturity");
+		},
+		onNavMaturityAlerts: function() {
+			this._setPage("maturityAlerts");
+		},
+		onNavMaturityCalendar: function() {
+			this._setPage("maturityCalendar");
+		},
+		onNavAccounting: function() {
+			this._setPage("accounting");
+		},
+		onNavMonthEnd: function() {
+			this._setPage("monthEnd");
+		},
+		onNavNewfd: function() {
+			this._setPage("newfd");
+		},
+		onNavLegacyFd: function() {
+			this._setPage("legacyfd");
+		},
+		onNavAutoRenewal: function() {
+			this._setPage("autoRenewal");
+		},
+		onNavSettings: function() {
+			this._setPage("settings");
+		},
 
 		onCompanyCodeValueHelp: function() {
 			this._openValueHelp({
@@ -97,7 +122,7 @@ sap.ui.define([
 			});
 		},
 
-		onBankNameValueHelp: function () {
+		onBankNameValueHelp: function() {
 
 			this._openValueHelp({
 				title: "Bank Account",
@@ -110,12 +135,10 @@ sap.ui.define([
 
 				targetPath: "/bank",
 
-				additionalMappings: [
-					{
-						source: "HKONT",
-						target: "/bankGL"
-					}
-				]
+				additionalMappings: [{
+					source: "HKONT",
+					target: "/bankGL"
+				}]
 			});
 
 		},
@@ -139,8 +162,7 @@ sap.ui.define([
 			});
 		},
 
-
-		onGlReceivableValueHelp: function () {
+		onGlReceivableValueHelp: function() {
 			this._openValueHelp({
 				title: "Interest Receivable GL",
 				entitySet: "/GlReceivableSet",
@@ -149,7 +171,7 @@ sap.ui.define([
 			});
 		},
 
-		onGlIncomeValueHelp: function () {
+		onGlIncomeValueHelp: function() {
 			this._openValueHelp({
 				title: "Interest Income GL",
 				entitySet: "/GlInterestSet",
@@ -157,105 +179,105 @@ sap.ui.define([
 				targetPath: "/glInc"
 			});
 		},
-		onDisplayJournalEntry: function (oEvent) {
+		onDisplayJournalEntry: function(oEvent) {
 
-    var oSource = oEvent.getSource();
+			var oSource = oEvent.getSource();
 
-    var oContext =
-        oSource.getBindingContext("maturityDisplay") ||
-        oSource.getBindingContext();
+			var oContext =
+				oSource.getBindingContext("maturityDisplay") ||
+				oSource.getBindingContext();
 
-    if (!oContext) {
-        MessageToast.show("Unable to determine selected record.");
-        return;
-    }
+			if (!oContext) {
+				MessageToast.show("Unable to determine selected record.");
+				return;
+			}
 
-    var oData = oContext.getObject();
+			var oData = oContext.getObject();
 
-    // Determine which link was clicked
-    var oBindingInfo = oSource.getBindingInfo("text");
-    var sBoundPath = oBindingInfo &&
-        oBindingInfo.parts &&
-        oBindingInfo.parts[0] &&
-        oBindingInfo.parts[0].path;
+			// Determine which link was clicked
+			var oBindingInfo = oSource.getBindingInfo("text");
+			var sBoundPath = oBindingInfo &&
+				oBindingInfo.parts &&
+				oBindingInfo.parts[0] &&
+				oBindingInfo.parts[0].path;
 
-    var bReversal = sBoundPath === "fdRevNo" ||
-        sBoundPath === "FD_REV_NO" ||
-        sBoundPath === "fdRevNoText";
+			var bReversal = sBoundPath === "fdRevNo" ||
+				sBoundPath === "FD_REV_NO" ||
+				sBoundPath === "fdRevNoText";
 
-    var bTds = sBoundPath === "tdsDocNo" ||
-        sBoundPath === "TDS_DOC_NO";
+			var bTds = sBoundPath === "tdsDocNo" ||
+				sBoundPath === "TDS_DOC_NO";
 
-    var bRenewal = sBoundPath === "renewalDocNo" ||
-        sBoundPath === "renewalDocNoText";
+			var bRenewal = sBoundPath === "renewalDocNo" ||
+				sBoundPath === "renewalDocNoText";
 
-    var sDocNo;
+			var sDocNo;
 
-    if (bReversal) {
-        sDocNo = oData.fdRevNo || oData.FD_REV_NO;
-    } else if (bTds) {
-        sDocNo = oData.tdsDocNo || oData.TDS_DOC_NO;
-    } else if (bRenewal) {
-        sDocNo = oData.renewalDocNo || oData.RENEWAL_DOC_NO;
-    } else {
-        sDocNo = oData.fdDocNo || oData.FD_DOC_NO;
-    }
+			if (bReversal) {
+				sDocNo = oData.fdRevNo || oData.FD_REV_NO;
+			} else if (bTds) {
+				sDocNo = oData.tdsDocNo || oData.TDS_DOC_NO;
+			} else if (bRenewal) {
+				sDocNo = oData.renewalDocNo || oData.RENEWAL_DOC_NO;
+			} else {
+				sDocNo = oData.fdDocNo || oData.FD_DOC_NO;
+			}
 
-    if (!sDocNo) {
-        MessageToast.show((bReversal ? "Reversal" : bTds ? "TDS" : bRenewal ? "Renewal" : "Accounting") + " Document not available.");
-        return;
-    }
+			if (!sDocNo) {
+				MessageToast.show((bReversal ? "Reversal" : bTds ? "TDS" : bRenewal ? "Renewal" : "Accounting") + " Document not available.");
+				return;
+			}
 
-    // Determine the relevant date for Fiscal Year calculation based on document type
-    var oDate;
-    
-    if (bTds) {
-        // Maturity/TDS document is posted at maturity
-        var vMatDate = oData.maturity || oData.maturityDate;
-        oDate = vMatDate ? this._parseODataDate(vMatDate) : new Date();
-    } else if (bReversal) {
-        // Reversal documents are posted during month-end or maturity
-        oDate = new Date();
-    } else if (bRenewal) {
-        // Renewal document is posted on the renewal date
-        var sRenewalDate = oData.renewalDate || oData.RENEWAL_DATE;
-        oDate = sRenewalDate ? this._parseODataDate(sRenewalDate) : new Date();
-    } else {
-        // FD opening document is posted on the start date
-        var sStartDate = oData.start || oData.startDate;
-        if (!sStartDate) {
-            MessageToast.show("Start Date not available.");
-            return;
-        }
-        oDate = this._parseODataDate(sStartDate);
-    }
+			// Determine the relevant date for Fiscal Year calculation based on document type
+			var oDate;
 
-    if (!oDate || isNaN(oDate.getTime())) {
-        oDate = new Date(); // Safe fallback
-    }
+			if (bTds) {
+				// Maturity/TDS document is posted at maturity
+				var vMatDate = oData.maturity || oData.maturityDate;
+				oDate = vMatDate ? this._parseODataDate(vMatDate) : new Date();
+			} else if (bReversal) {
+				// Reversal documents are posted during month-end or maturity
+				oDate = new Date();
+			} else if (bRenewal) {
+				// Renewal document is posted on the renewal date
+				var sRenewalDate = oData.renewalDate || oData.RENEWAL_DATE;
+				oDate = sRenewalDate ? this._parseODataDate(sRenewalDate) : new Date();
+			} else {
+				// FD opening document is posted on the start date
+				var sStartDate = oData.start || oData.startDate;
+				if (!sStartDate) {
+					MessageToast.show("Start Date not available.");
+					return;
+				}
+				oDate = this._parseODataDate(sStartDate);
+			}
 
-    var iYear = oDate.getFullYear();
-    var iMonth = oDate.getMonth() + 1;
+			if (!oDate || isNaN(oDate.getTime())) {
+				oDate = new Date(); // Safe fallback
+			}
 
-    var sFiscalYear = (iMonth >= 4) ?
-        String(iYear) :
-        String(iYear - 1);
+			var iYear = oDate.getFullYear();
+			var iMonth = oDate.getMonth() + 1;
 
-    sap.ushell.Container
-        .getService("CrossApplicationNavigation")
-        .toExternal({
-            target: {
-                semanticObject: "AccountingDocument",
-                action: "displayDocument"
-            },
-            params: {
-                CompanyCode: oData.coCode || oData.CoCode,
-                AccountingDocument: sDocNo,
-                FiscalYear: sFiscalYear
-            }
-        });
+			var sFiscalYear = (iMonth >= 4) ?
+				String(iYear) :
+				String(iYear - 1);
 
-},
+			sap.ushell.Container
+				.getService("CrossApplicationNavigation")
+				.toExternal({
+					target: {
+						semanticObject: "AccountingDocument",
+						action: "displayDocument"
+					},
+					params: {
+						CompanyCode: oData.coCode || oData.CoCode,
+						AccountingDocument: sDocNo,
+						FiscalYear: sFiscalYear
+					}
+				});
+
+		},
 		onProfitCenterValueHelp: function() {
 			this._openValueHelp({
 				title: "Profit Center",
@@ -286,7 +308,7 @@ sap.ui.define([
 			});
 		},
 
-		onLegacyBankNameValueHelp: function () {
+		onLegacyBankNameValueHelp: function() {
 
 			this._openValueHelp({
 				title: "Bank Account",
@@ -299,12 +321,10 @@ sap.ui.define([
 				targetPath: "/bank",
 				modelName: "legacyFd",
 
-				additionalMappings: [
-					{
-						source: "HKONT",
-						target: "/bankGL"
-					}
-				]
+				additionalMappings: [{
+					source: "HKONT",
+					target: "/bankGL"
+				}]
 			});
 
 		},
@@ -340,7 +360,7 @@ sap.ui.define([
 			});
 		},
 
-		onLegacyGlReceivableValueHelp: function () {
+		onLegacyGlReceivableValueHelp: function() {
 			this._openValueHelp({
 				title: "Interest Receivable GL",
 				entitySet: "/GlReceivableSet",
@@ -350,7 +370,7 @@ sap.ui.define([
 			});
 		},
 
-		onLegacyGlIncomeValueHelp: function () {
+		onLegacyGlIncomeValueHelp: function() {
 			this._openValueHelp({
 				title: "Interest Income GL",
 				entitySet: "/GlInterestSet",
@@ -397,13 +417,27 @@ sap.ui.define([
 		onSortFD: function(oEvent) {
 			if (!this._oSortActionSheet) {
 
-				var aOptions = [
-					{ text: "Principal (High to Low)", path: "principal", descending: true },
-					{ text: "Start Date (Newest first)", path: "start", descending: true },
-					{ text: "Maturity (Soonest first)", path: "start", descending: false },
-					{ text: "Creation Date (Newest first)", path: "creationDate", descending: true },
-					{ text: "Bank (A-Z)", path: "bank", descending: false }
-				];
+				var aOptions = [{
+					text: "Principal (High to Low)",
+					path: "principal",
+					descending: true
+				}, {
+					text: "Start Date (Newest first)",
+					path: "start",
+					descending: true
+				}, {
+					text: "Maturity (Soonest first)",
+					path: "start",
+					descending: false
+				}, {
+					text: "Creation Date (Newest first)",
+					path: "creationDate",
+					descending: true
+				}, {
+					text: "Bank (A-Z)",
+					path: "bank",
+					descending: false
+				}];
 
 				this._oSortActionSheet = new ActionSheet({
 					title: "Sort by",
@@ -442,10 +476,22 @@ sap.ui.define([
 					content: [
 						new VBox({
 							items: [
-								new CheckBox({ text: "Active", selected: "{filter>/active}" }),
-								new CheckBox({ text: "Matured", selected: "{filter>/matured}" }),
-								new CheckBox({ text: "Renewed", selected: "{filter>/renewed}" }),
-								new CheckBox({ text: "Auto Renew", selected: "{filter>/autoRenew}" })
+								new CheckBox({
+									text: "Active",
+									selected: "{filter>/active}"
+								}),
+								new CheckBox({
+									text: "Matured",
+									selected: "{filter>/matured}"
+								}),
+								new CheckBox({
+									text: "Renewed",
+									selected: "{filter>/renewed}"
+								}),
+								new CheckBox({
+									text: "Auto Renew",
+									selected: "{filter>/autoRenew}"
+								})
 							]
 						}).addStyleClass("sapUiSmallMargin")
 					],
@@ -463,7 +509,9 @@ sap.ui.define([
 					}),
 					endButton: new Button({
 						text: "Cancel",
-						press: function() { this._oFilterDialog.close(); }.bind(this)
+						press: function() {
+							this._oFilterDialog.close();
+						}.bind(this)
 					})
 				});
 
@@ -484,33 +532,84 @@ sap.ui.define([
 			}
 
 			var aContexts = oBinding.getContexts(0, oBinding.getLength());
-			var aRows = aContexts.map(function(oContext) { return oContext.getObject(); });
+			var aRows = aContexts.map(function(oContext) {
+				return oContext.getObject();
+			});
 
 			if (!aRows.length) {
 				MessageToast.show("No rows match the current filter.");
 				return;
 			}
 
-			var aColumns = [
-				{ label: "FD Number", property: "id", type: "string" },
-				{ label: "Bank", property: "bank", type: "string" },
-				{ label: "Principal", property: "principalText", type: "string" },
-				{ label: "Lien Amount", property: "lienAmtText", type: "string" },
-				{ label: "Not Lien Amount", property: "notLienAmtText", type: "string" },
-				{ label: "Rate", property: "rateText", type: "string" },
-				{ label: "Start", property: "startText", type: "string" },
-				{ label: "Creation Date", property: "creationDateText", type: "string" },
-				{ label: "Maturity", property: "maturityText", type: "string" },
-				{ label: "Status", property: "statusText", type: "string" },
-				{ label: "Accounting Doc", property: "fdDocNoText", type: "string" },
-				{ label: "Renewal Document", property: "renewalDocNoText", type: "string" },
-				{ label: "Renewal Date", property: "renewalDateText", type: "string" },
-				{ label: "Renewal Amount", property: "renewalAmtText", type: "string" },
-				{ label: "Auto-renew", property: "autoRenewText", type: "string" }
-			];
+			var aColumns = [{
+				label: "FD Number",
+				property: "id",
+				type: "string"
+			}, {
+				label: "Bank",
+				property: "bank",
+				type: "string"
+			}, {
+				label: "Principal",
+				property: "principalText",
+				type: "string"
+			}, {
+				label: "Lien Amount",
+				property: "lienAmtText",
+				type: "string"
+			}, {
+				label: "Not Lien Amount",
+				property: "notLienAmtText",
+				type: "string"
+			}, {
+				label: "Rate",
+				property: "rateText",
+				type: "string"
+			}, {
+				label: "Start",
+				property: "startText",
+				type: "string"
+			}, {
+				label: "Creation Date",
+				property: "creationDateText",
+				type: "string"
+			}, {
+				label: "Maturity",
+				property: "maturityText",
+				type: "string"
+			}, {
+				label: "Status",
+				property: "statusText",
+				type: "string"
+			}, {
+				label: "Accounting Doc",
+				property: "fdDocNoText",
+				type: "string"
+			}, {
+				label: "Renewal Document",
+				property: "renewalDocNoText",
+				type: "string"
+			}, {
+				label: "Renewal Date",
+				property: "renewalDateText",
+				type: "string"
+			}, {
+				label: "Renewal Amount",
+				property: "renewalAmtText",
+				type: "string"
+			}, {
+				label: "Auto-renew",
+				property: "autoRenewText",
+				type: "string"
+			}];
 
 			var oSheet = new Spreadsheet({
-				workbook: { columns: aColumns, context: { title: "Active Fixed Deposits" } },
+				workbook: {
+					columns: aColumns,
+					context: {
+						title: "Active Fixed Deposits"
+					}
+				},
 				dataSource: aRows,
 				fileName: "Active_Fixed_Deposits.xlsx",
 				worker: false
@@ -544,7 +643,7 @@ sap.ui.define([
 
 			var oStartDate = new Date(sStart);
 			var oMaturityDate = new Date(sMaturity);
-			
+
 			if (isNaN(oStartDate.getTime()) || isNaN(oMaturityDate.getTime())) {
 				oCalcModel.setProperty("/maturityValueText", "");
 				oCalcModel.setProperty("/interestText", "");
@@ -552,8 +651,8 @@ sap.ui.define([
 			}
 
 			// Inclusive days counting
-			oStartDate.setHours(0,0,0,0);
-			oMaturityDate.setHours(0,0,0,0);
+			oStartDate.setHours(0, 0, 0, 0);
+			oMaturityDate.setHours(0, 0, 0, 0);
 			var iDiffTime = oMaturityDate.getTime() - oStartDate.getTime();
 			var iDays = Math.floor(iDiffTime / (1000 * 3600 * 24)) + 1;
 			if (iDays < 0) iDays = 0;
@@ -566,7 +665,7 @@ sap.ui.define([
 			oCalcModel.setProperty("/interestText", this._fmt(fInterest));
 		},
 
-		_getAccountingDocLienPropertyName: function (oServiceModel) {
+		_getAccountingDocLienPropertyName: function(oServiceModel) {
 			try {
 				var oMetadata = oServiceModel && oServiceModel.getServiceMetadata && oServiceModel.getServiceMetadata();
 				if (oMetadata && oMetadata.dataServices && oMetadata.dataServices.schema) {
@@ -595,7 +694,7 @@ sap.ui.define([
 			return "LIEN_AMT";
 		},
 
-		_getFdDetailsProperties: function (oServiceModel) {
+		_getFdDetailsProperties: function(oServiceModel) {
 			try {
 				var oMetadata = oServiceModel && oServiceModel.getServiceMetadata && oServiceModel.getServiceMetadata();
 				if (oMetadata && oMetadata.dataServices && oMetadata.dataServices.schema) {
@@ -605,7 +704,9 @@ sap.ui.define([
 						for (var j = 0; j < aEntityTypes.length; j++) {
 							if (aEntityTypes[j].name === "FdDetails") {
 								var aProps = aEntityTypes[j].property || [];
-								return aProps.map(function(p) { return p.name; });
+								return aProps.map(function(p) {
+									return p.name;
+								});
 							}
 						}
 					}
@@ -616,7 +717,7 @@ sap.ui.define([
 			return null;
 		},
 
-		onCreateFD: function () {
+		onCreateFD: function() {
 
 			var oNewFdModel = this.getView().getModel("newFd");
 			var oData = oNewFdModel.getData();
@@ -657,8 +758,7 @@ sap.ui.define([
 			});
 
 			// Mandatory field validation
-			if (
-				!sCoCode ||
+			if (!sCoCode ||
 				!sId ||
 				!sBank ||
 				!sPrincipal ||
@@ -772,7 +872,7 @@ sap.ui.define([
 
 				filters: aDocFilters,
 
-				success: function (oResponse) {
+				success: function(oResponse) {
 
 					var aResults = oResponse.results || [];
 
@@ -796,7 +896,7 @@ sap.ui.define([
 					}
 
 					MessageBox.success(sMsg, {
-						onClose: function () {
+						onClose: function() {
 							if (oDialog) {
 								oDialog.close();
 							}
@@ -821,7 +921,7 @@ sap.ui.define([
 
 				}.bind(this),
 
-				error: function (oError) {
+				error: function(oError) {
 
 					var sMessage = this._extractODataError(oError);
 
@@ -854,8 +954,7 @@ sap.ui.define([
 				return;
 			}
 
-			if (
-				!sCoCode ||
+			if (!sCoCode ||
 				!sId ||
 				!sBank ||
 				!sPrincipal ||
@@ -954,7 +1053,7 @@ sap.ui.define([
 
 			FdDetailsService.createLegacyFd(oServiceModel, oPayload, {
 
-				success: function (oResponse) {
+				success: function(oResponse) {
 
 					var sDocNo = oResponse && oResponse.FdDocNo ? oResponse.FdDocNo : "";
 
@@ -987,7 +1086,7 @@ sap.ui.define([
 
 				}.bind(this),
 
-				error: function (oError) {
+				error: function(oError) {
 
 					var sMessage = this._extractODataError(oError);
 
@@ -1012,14 +1111,16 @@ sap.ui.define([
 			})[0];
 			this._showMaturityDialog(oFd);
 		},
-		onRefreshFDTable: function () {
+		onRefreshFDTable: function() {
 
 			this._loadFdDetailsFromService();
 			MessageToast.show("Refreshing...");
 
 		},
 		onRunMonthEnd: function() {
-			MessageBox.success("Month-end run complete.\n\nInterest accrual entries posted for active FDs.\nPrevious month reversals posted on the first day.\nMaturity alerts refreshed.\n\nTotal accrual posted: " + this.getView().getModel().getProperty("/metrics/accruedInterest"));
+			MessageBox.success(
+				"Month-end run complete.\n\nInterest accrual entries posted for active FDs.\nPrevious month reversals posted on the first day.\nMaturity alerts refreshed.\n\nTotal accrual posted: " +
+				this.getView().getModel().getProperty("/metrics/accruedInterest"));
 		},
 
 		onSaveSettings: function() {
@@ -1100,7 +1201,7 @@ sap.ui.define([
 			}
 		},
 
-		_refresh: function () {
+		_refresh: function() {
 
 			var oModel = this.getView().getModel();
 			var oData = this._buildAppData();
@@ -1109,7 +1210,7 @@ sap.ui.define([
 			console.log("FD Count:", oData.fds.length);
 			console.table(oData.fds);
 
-			Object.keys(oData).forEach(function (sPath) {
+			Object.keys(oData).forEach(function(sPath) {
 				oModel.setProperty("/" + sPath, oData[sPath]);
 			});
 
@@ -1122,7 +1223,7 @@ sap.ui.define([
 			}
 
 		},
-		_loadFdDetailsFromService: function () {
+		_loadFdDetailsFromService: function() {
 
 			BusyIndicator.show(0);
 
@@ -1136,7 +1237,7 @@ sap.ui.define([
 
 			FdDetailsService.readFdDetails(oServiceModel, {
 
-				success: function (oData) {
+				success: function(oData) {
 
 					BusyIndicator.hide();
 
@@ -1156,7 +1257,7 @@ sap.ui.define([
 
 				}.bind(this),
 
-				error: function () {
+				error: function() {
 
 					BusyIndicator.hide();
 
@@ -1277,7 +1378,7 @@ sap.ui.define([
 			}
 		},
 
-		_openValueHelp: function (oConfig) {
+		_openValueHelp: function(oConfig) {
 
 			// Defensive guard: these are normally set up in
 			// initializeApplication(), but if that hasn't run yet for any
@@ -1290,7 +1391,7 @@ sap.ui.define([
 			var sKey = oConfig.entitySet;
 			var sDescProp = oConfig.descriptionProperty || oConfig.titleProperty;
 
-			var fnFilter = function (oEvent) {
+			var fnFilter = function(oEvent) {
 				var sValue = oEvent.getParameter("value");
 				var aFilters = [];
 				if (sValue) {
@@ -1330,7 +1431,7 @@ sap.ui.define([
 				return;
 			}
 
-			var fnCreateDialog = function (aResults) {
+			var fnCreateDialog = function(aResults) {
 
 				var oDialog = new SelectDialog({
 
@@ -1342,7 +1443,7 @@ sap.ui.define([
 					search: fnFilter,
 					liveChange: fnFilter,
 
-					confirm: function (oEvent) {
+					confirm: function(oEvent) {
 
 						var oSelectedItem = oEvent.getParameter("selectedItem");
 
@@ -1365,7 +1466,7 @@ sap.ui.define([
 						// Populate additional fields if configured
 						if (oDialog._config.additionalMappings) {
 
-							oDialog._config.additionalMappings.forEach(function (oMap) {
+							oDialog._config.additionalMappings.forEach(function(oMap) {
 
 								oModel.setProperty(
 									oMap.target,
@@ -1380,7 +1481,9 @@ sap.ui.define([
 
 				});
 
-				oDialog.setModel(new JSONModel({ items: aResults }));
+				oDialog.setModel(new JSONModel({
+					items: aResults
+				}));
 				oDialog.bindAggregation("items", {
 					path: "/items",
 					template: new StandardListItem({
@@ -1413,7 +1516,7 @@ sap.ui.define([
 
 			oServiceModel.read(sKey, {
 
-				success: function (oData) {
+				success: function(oData) {
 
 					BusyIndicator.hide();
 
@@ -1425,7 +1528,7 @@ sap.ui.define([
 
 				}.bind(this),
 
-				error: function (oError) {
+				error: function(oError) {
 
 					sap.ui.core.BusyIndicator.hide();
 
@@ -1456,7 +1559,8 @@ sap.ui.define([
 				oEntity.CreateDate ||
 				oEntity.create_date;
 
-			if (!oCreateDate || oCreateDate === "00000000" || oCreateDate === "0000-00-00" || (typeof oCreateDate === "string" && oCreateDate.indexOf("Date(0)") > -1)) {
+			if (!oCreateDate || oCreateDate === "00000000" || oCreateDate === "0000-00-00" || (typeof oCreateDate === "string" && oCreateDate.indexOf(
+					"Date(0)") > -1)) {
 				oCreateDate = oEntity.StartDate || oEntity.START_DATE || new Date();
 			}
 
@@ -1464,7 +1568,8 @@ sap.ui.define([
 
 			var oRenewalDateRaw = oEntity.RenewalDate || oEntity.RENEWAL_DATE || oEntity.renewal_date;
 			var sRenewalDateIso = "";
-			if (oRenewalDateRaw && oRenewalDateRaw !== "00000000" && oRenewalDateRaw !== "0000-00-00" && (typeof oRenewalDateRaw !== "string" || oRenewalDateRaw.indexOf("Date(0)") === -1)) {
+			if (oRenewalDateRaw && oRenewalDateRaw !== "00000000" && oRenewalDateRaw !== "0000-00-00" && (typeof oRenewalDateRaw !== "string" ||
+					oRenewalDateRaw.indexOf("Date(0)") === -1)) {
 				sRenewalDateIso = this._dateToIso(this._parseODataDate(oRenewalDateRaw));
 			}
 
@@ -1606,13 +1711,25 @@ sap.ui.define([
 			}.bind(this)).filter(Boolean);
 
 			var aEntries = this._entries.map(this._decorateEntry.bind(this));
-			var sFdFilter = this.getView() && this.getView().getModel("ui") ? this.getView().getModel("ui").getProperty("/fdFilter") || "all" : "all";
-			var sAcctFilter = this.getView() && this.getView().getModel("ui") ? this.getView().getModel("ui").getProperty("/acctFilter") || "all" : "all";
-			var aActive = aFds.filter(function(oFd) { return oFd.status === "active"; });
-			var fCorpus = aActive.reduce(function(iSum, oFd) { return iSum + oFd.principal; }, 0);
-			var fLienCorpus = aActive.reduce(function(iSum, oFd) { return iSum + (oFd.lienAmt || 0); }, 0);
-			var fNotLienCorpus = aActive.reduce(function(iSum, oFd) { return iSum + (oFd.notLienAmt || 0); }, 0);
-			var fAccrued = aActive.reduce(function(iSum, oFd) { return iSum + oFd.currentMonthAccrual; }, 0);
+			var sFdFilter = this.getView() && this.getView().getModel("ui") ? this.getView().getModel("ui").getProperty("/fdFilter") || "all" :
+				"all";
+			var sAcctFilter = this.getView() && this.getView().getModel("ui") ? this.getView().getModel("ui").getProperty("/acctFilter") ||
+				"all" : "all";
+			var aActive = aFds.filter(function(oFd) {
+				return oFd.status === "active";
+			});
+			var fCorpus = aActive.reduce(function(iSum, oFd) {
+				return iSum + oFd.principal;
+			}, 0);
+			var fLienCorpus = aActive.reduce(function(iSum, oFd) {
+				return iSum + (oFd.lienAmt || 0);
+			}, 0);
+			var fNotLienCorpus = aActive.reduce(function(iSum, oFd) {
+				return iSum + (oFd.notLienAmt || 0);
+			}, 0);
+			var fAccrued = aActive.reduce(function(iSum, oFd) {
+				return iSum + oFd.currentMonthAccrual;
+			}, 0);
 
 			var aAutoRenewalFds = aFds.filter(function(oFd) {
 				if (!oFd || !oFd.id) return false;
@@ -1642,7 +1759,10 @@ sap.ui.define([
 			}
 
 			var aRenewalMonthKeys = Object.keys(mRenewalMonthsMap).sort();
-			var aRenewalMonths = [{ key: "all", text: "All Months" }];
+			var aRenewalMonths = [{
+				key: "all",
+				text: "All Months"
+			}];
 			aRenewalMonthKeys.forEach(function(sKey) {
 				aRenewalMonths.push({
 					key: sKey,
@@ -1661,7 +1781,9 @@ sap.ui.define([
 				loadStatus: this._loadState.status,
 				loadStatusState: this._loadState.state,
 				fds: aFds,
-				filteredFds: sFdFilter === "all" ? aFds : aFds.filter(function(oFd) { return oFd.status === sFdFilter; }),
+				filteredFds: sFdFilter === "all" ? aFds : aFds.filter(function(oFd) {
+					return oFd.status === sFdFilter;
+				}),
 				interestSchedule: aActive,
 				alerts: this._buildAlerts(aFds),
 				accountingEntries: aEntries,
@@ -1682,7 +1804,9 @@ sap.ui.define([
 					accruedInterestPeriod: bIsHistorical ? ("Month to " + sAsOfDateFormatted) : "Current Month",
 					avgRateSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active FDs",
 					maturingThisMonth: this._countMaturingThisMonth(aFds, oAsOfDate) + " FDs",
-					autoRenewCount: aActive.filter(function(oFd) { return oFd.autoRenew; }).length + " FDs",
+					autoRenewCount: aActive.filter(function(oFd) {
+						return oFd.autoRenew;
+					}).length + " FDs",
 					// Month-end always closes the current calendar month, so
 					// this tells the user, before they even click "Run
 					// month-end", which month's validation/posting will
@@ -1697,7 +1821,7 @@ sap.ui.define([
 				renewalMonths: aRenewalMonths,
 				selectedRenewalMonthKey: sExistingMonthKey,
 				selectedRenewalMonthText: sExistingMonthText,
-				
+
 				// As of Date snapshot properties
 				asOfDate: oAsOfDate,
 				asOfDateText: this._dateToIso(oAsOfDate),
@@ -1711,21 +1835,28 @@ sap.ui.define([
 				totalLienCorpus: this._fmt(fLienCorpus),
 				totalNotLienCorpus: this._fmt(fNotLienCorpus),
 				avgInterestRate: (function() {
-					var fTotalPrincipal = aActive.reduce(function(sum, fd) { return sum + Number(fd.principal || 0); }, 0);
+					var fTotalPrincipal = aActive.reduce(function(sum, fd) {
+						return sum + Number(fd.principal || 0);
+					}, 0);
 					var fTotalInterest = aActive.reduce(function(sum, fd) {
 						var p = Number(fd.principal || 0);
 						var r = Number(fd.rate || 0);
-						var i = (fd.interest !== undefined && !isNaN(parseFloat(fd.interest)) && parseFloat(fd.interest) > 0)
-							? parseFloat(fd.interest)
-							: (p * r) / 100;
+						var i = (fd.interest !== undefined && !isNaN(parseFloat(fd.interest)) && parseFloat(fd.interest) > 0) ? parseFloat(fd.interest) :
+							(p * r) / 100;
 						return sum + i;
 					}, 0);
 					return fTotalPrincipal > 0 ? ((fTotalInterest / fTotalPrincipal) * 100).toFixed(2) : "0.00";
 				})(),
 				nextMaturityDate: aActive.length > 0 ? this._fmtDate(
-					aActive.map(function(fd) { return this._maturityDate(fd); }.bind(this))
-						   .filter(function(d) { return d && d.getTime() > oAsOfDate.getTime(); })
-						   .sort(function(a, b) { return a.getTime() - b.getTime(); })[0]
+					aActive.map(function(fd) {
+						return this._maturityDate(fd);
+					}.bind(this))
+					.filter(function(d) {
+						return d && d.getTime() > oAsOfDate.getTime();
+					})
+					.sort(function(a, b) {
+						return a.getTime() - b.getTime();
+					})[0]
 				) : "N/A"
 			};
 		},
@@ -1746,16 +1877,26 @@ sap.ui.define([
 			var aPalette = ["#2563EB", "#10B981", "#F97316", "#8B5CF6", "#0e7c86", "#c8952b", "#EC4899"];
 
 			var aSorted = Object.keys(oGroups).map(function(sBank) {
-				return { bank: sBank, amount: oGroups[sBank] };
-			}).sort(function(a, b) { return b.amount - a.amount; });
+				return {
+					bank: sBank,
+					amount: oGroups[sBank]
+				};
+			}).sort(function(a, b) {
+				return b.amount - a.amount;
+			});
 
 			var iTopN = aPalette.length - 1;
 			var aTop = aSorted.slice(0, iTopN);
 			var aRest = aSorted.slice(iTopN);
 
 			if (aRest.length) {
-				var fOthersAmount = aRest.reduce(function(iSum, o) { return iSum + o.amount; }, 0);
-				aTop.push({ bank: aRest.length + " other bank" + (aRest.length > 1 ? "s" : ""), amount: fOthersAmount });
+				var fOthersAmount = aRest.reduce(function(iSum, o) {
+					return iSum + o.amount;
+				}, 0);
+				aTop.push({
+					bank: aRest.length + " other bank" + (aRest.length > 1 ? "s" : ""),
+					amount: fOthersAmount
+				});
 			}
 
 			return aTop.map(function(oGroup, iIndex) {
@@ -1802,26 +1943,23 @@ sap.ui.define([
 			var fNotLienPercent = (fNotLienSum / fTotal) * 100;
 			var fLienPercent = (fLienSum / fTotal) * 100;
 
-			return [
-				{
-					category: "Not Lien",
-					amount: fNotLienSum,
-					amountInLakhs: (fNotLienSum / 100000),
-					amountText: this._fmtCompact(fNotLienSum),
-					percent: fNotLienPercent,
-					percentText: fNotLienPercent.toFixed(1) + "%",
-					color: "#26A65B"
-				},
-				{
-					category: "Lien",
-					amount: fLienSum,
-					amountInLakhs: (fLienSum / 100000),
-					amountText: this._fmtCompact(fLienSum),
-					percent: fLienPercent,
-					percentText: fLienPercent.toFixed(1) + "%",
-					color: "#F89406"
-				}
-			];
+			return [{
+				category: "Not Lien",
+				amount: fNotLienSum,
+				amountInLakhs: (fNotLienSum / 100000),
+				amountText: this._fmtCompact(fNotLienSum),
+				percent: fNotLienPercent,
+				percentText: fNotLienPercent.toFixed(1) + "%",
+				color: "#26A65B"
+			}, {
+				category: "Lien",
+				amount: fLienSum,
+				amountInLakhs: (fLienSum / 100000),
+				amountText: this._fmtCompact(fLienSum),
+				percent: fLienPercent,
+				percentText: fLienPercent.toFixed(1) + "%",
+				color: "#F89406"
+			}];
 		},
 
 		// One bar per bank, showing the best rate currently on offer there -
@@ -1839,20 +1977,22 @@ sap.ui.define([
 			});
 
 			return Object.keys(oBestRate).map(function(sBank, iIndex) {
-				var fRate = oBestRate[sBank];
-				return {
-					bank: sBank,
-					rate: fRate,
-					rateText: fRate.toFixed(2) + "%",
-					color: iIndex === 0 ? "#c8952b" : "#0e7c86"
-				};
-			}).sort(function(a, b) { return b.rate - a.rate; }).slice(0, 5)
-			  // Re-flag the winner after sorting, and re-tone the rest, so
-			  // the highlighted bar is always the actual highest rate.
-			  .map(function(oRow, iIndex) {
-				oRow.color = iIndex === 0 ? "#c8952b" : "#0e7c86";
-				return oRow;
-			});
+					var fRate = oBestRate[sBank];
+					return {
+						bank: sBank,
+						rate: fRate,
+						rateText: fRate.toFixed(2) + "%",
+						color: iIndex === 0 ? "#c8952b" : "#0e7c86"
+					};
+				}).sort(function(a, b) {
+					return b.rate - a.rate;
+				}).slice(0, 5)
+				// Re-flag the winner after sorting, and re-tone the rest, so
+				// the highlighted bar is always the actual highest rate.
+				.map(function(oRow, iIndex) {
+					oRow.color = iIndex === 0 ? "#c8952b" : "#0e7c86";
+					return oRow;
+				});
 		},
 
 		// Merges the two fixed month-end dates (accrual run / reversal run)
@@ -1864,22 +2004,19 @@ sap.ui.define([
 			var oMonthEnd = new Date(oToday.getFullYear(), oToday.getMonth() + 1, 0);
 			var oReversalDay = new Date(oToday.getFullYear(), oToday.getMonth() + 1, 1);
 
-			var aEvents = [
-				{
-					date: oMonthEnd,
-					icon: "sap-icon://synchronize",
-					colorClass: "fdEventTeal",
-					title: "Month-end accrual run",
-					subtitle: "All active FDs"
-				},
-				{
-					date: oReversalDay,
-					icon: "sap-icon://undo",
-					colorClass: "fdEventInfo",
-					title: "Reversal run",
-					subtitle: "Reversal of " + this._fmtMonthYear(oToday) + " accrual"
-				}
-			];
+			var aEvents = [{
+				date: oMonthEnd,
+				icon: "sap-icon://synchronize",
+				colorClass: "fdEventTeal",
+				title: "Month-end accrual run",
+				subtitle: "All active FDs"
+			}, {
+				date: oReversalDay,
+				icon: "sap-icon://undo",
+				colorClass: "fdEventInfo",
+				title: "Reversal run",
+				subtitle: "Reversal of " + this._fmtMonthYear(oToday) + " accrual"
+			}];
 
 			aFds.filter(function(oFd) {
 				return oFd.status === "active";
@@ -1899,7 +2036,9 @@ sap.ui.define([
 			}.bind(this));
 
 			return aEvents
-				.sort(function(a, b) { return a.date - b.date; })
+				.sort(function(a, b) {
+					return a.date - b.date;
+				})
 				.slice(0, 6)
 				.map(function(oEvent) {
 					return {
@@ -1955,7 +2094,7 @@ sap.ui.define([
 			}];
 		},
 
-		_decorateFd: function (oFd, oCustomDate) {
+		_decorateFd: function(oFd, oCustomDate) {
 
 			try {
 
@@ -2000,7 +2139,8 @@ sap.ui.define([
 
 				var bStarted = oStartDate ? (oStartDate <= oAsOfDate) : true;
 				var bCreated = oCreationDate ? (oCreationDate <= oAsOfDate) : true;
-				var bExisted = bStarted && bCreated;
+				// var bExisted = bStarted && bCreated;
+				var bExisted = bStarted; // For As Of Date field change to Start Date
 
 				var bMatured = (oMaturityDay && oMaturityDay < oAsOfDate);
 				var bRenewed = (oFd.renewalDocNo && oRenewalDay && oRenewalDay <= oAsOfDate);
@@ -2016,7 +2156,8 @@ sap.ui.define([
 				} else if (bRenewed) {
 					oCopy.status = "renewed";
 					oCopy.statusText = "Renewed";
-					oCopy.statusState = (typeof sap !== "undefined" && sap.ui && sap.ui.core && sap.ui.core.ValueState && sap.ui.core.ValueState.Information) ? "Information" : "None";
+					oCopy.statusState = (typeof sap !== "undefined" && sap.ui && sap.ui.core && sap.ui.core.ValueState && sap.ui.core.ValueState.Information) ?
+						"Information" : "None";
 				} else {
 					oCopy.status = "active";
 					oCopy.statusText = "Active";
@@ -2074,7 +2215,7 @@ sap.ui.define([
 				oModel.setProperty("/" + sPath, oData[sPath]);
 			});
 		},
-		_setCurrentFiscalYear: function () {
+		_setCurrentFiscalYear: function() {
 
 			var oDatePicker = this.byId("dpStartDate");
 
@@ -2090,13 +2231,13 @@ sap.ui.define([
 
 			if (iMonth >= 3) { // April to December
 
-				oFiscalStart = new Date(iYear, 3, 1);      // 1-Apr-current year
-				oFiscalEnd   = new Date(iYear + 1, 2, 31); // 31-Mar-next year
+				oFiscalStart = new Date(iYear, 3, 1); // 1-Apr-current year
+				oFiscalEnd = new Date(iYear + 1, 2, 31); // 31-Mar-next year
 
 			} else { // January to March
 
-				oFiscalStart = new Date(iYear - 1, 3, 1);  // 1-Apr-last year
-				oFiscalEnd   = new Date(iYear, 2, 31);     // 31-Mar-current year
+				oFiscalStart = new Date(iYear - 1, 3, 1); // 1-Apr-last year
+				oFiscalEnd = new Date(iYear, 2, 31); // 31-Mar-current year
 
 			}
 
@@ -2249,12 +2390,13 @@ sap.ui.define([
 			return oEvent.getSource().getBindingContext().getObject();
 		},
 
-		_maturityDate: function (oFd) {
+		_maturityDate: function(oFd) {
 			if (!oFd) {
 				return null;
 			}
 
-			if (oFd.maturityDateOData && oFd.maturityDateOData !== "00000000" && oFd.maturityDateOData !== "0000-00-00" && (typeof oFd.maturityDateOData !== "string" || oFd.maturityDateOData.indexOf("Date(0)") === -1)) {
+			if (oFd.maturityDateOData && oFd.maturityDateOData !== "00000000" && oFd.maturityDateOData !== "0000-00-00" && (typeof oFd.maturityDateOData !==
+					"string" || oFd.maturityDateOData.indexOf("Date(0)") === -1)) {
 				var oBackendMat = this._parseODataDate(oFd.maturityDateOData);
 				if (oBackendMat && !isNaN(oBackendMat.getTime())) {
 					return oBackendMat;
@@ -2305,7 +2447,7 @@ sap.ui.define([
 			return Number(oFd.principal) * Math.pow(1 + fRate / iFreq, iFreq * fYears);
 		},
 
-		_applyDaywiseAccrual: function (oFd, oCustomDate) {
+		_applyDaywiseAccrual: function(oFd, oCustomDate) {
 
 			console.log("========== APPLY DAYWISE ACCRUAL ==========");
 
@@ -2334,7 +2476,8 @@ sap.ui.define([
 				oCreationDate = this._startOfDay(new Date(oFd.creationDate + "T00:00:00"));
 			}
 
-			if (!oStartDate || !oMaturityDate || oStartDate > oToday || (oCreationDate && oCreationDate > oToday)) {
+			// if (!oStartDate || !oMaturityDate || oStartDate > oToday || (oCreationDate && oCreationDate > oToday)) {
+			if (!oStartDate || !oMaturityDate || oStartDate > oToday) { // For As Of Date field change to Start Date
 				oFd.accruedDays = 0;
 				oFd.accruedDaysText = "0 days";
 				oFd.dailyAccrual = 0;
@@ -2385,13 +2528,11 @@ sap.ui.define([
 			oFd.currentMonthAccrualText = this._fmt(fCurrentMonthAccrual);
 
 			var oAccrualStart = oStartDate > oMonthStart ? oStartDate : oMonthStart;
-			oFd.accrualPeriodText = iDays
-				? this._fmtDate(oAccrualStart) + " - " + this._fmtDate(oCalculationDate)
-				: "No accrual this month";
+			oFd.accrualPeriodText = iDays ? this._fmtDate(oAccrualStart) + " - " + this._fmtDate(oCalculationDate) : "No accrual this month";
 
 		},
 
-		_startOfDay: function (oDate) {
+		_startOfDay: function(oDate) {
 
 			if (!oDate || !(oDate instanceof Date) || isNaN(oDate.getTime())) {
 				return null;
@@ -2442,42 +2583,42 @@ sap.ui.define([
 		// That string later satisfied `!oFd.start` checks in _maturityDate(),
 		// which then failed its own isNaN() guard and returned null - which
 		// is what eventually crashed _countMaturingThisMonth() below.
-	_parseODataDate: function (vDate) {
+		_parseODataDate: function(vDate) {
 
-    var aMatch;
+			var aMatch;
 
-    if (vDate instanceof Date) {
-        return vDate;
-    }
+			if (vDate instanceof Date) {
+				return vDate;
+			}
 
-    if (typeof vDate === "string" && vDate.trim()) {
+			if (typeof vDate === "string" && vDate.trim()) {
 
-        // Handles /Date(123456789)/
-        aMatch = /\/Date\((\d+)\)\//.exec(vDate);
+				// Handles /Date(123456789)/
+				aMatch = /\/Date\((\d+)\)\//.exec(vDate);
 
-        if (aMatch) {
-            return new Date(Number(aMatch[1]));
-        }
+				if (aMatch) {
+					return new Date(Number(aMatch[1]));
+				}
 
-        // Handles YYYYMMDD
-        if (/^\d{8}$/.test(vDate)) {
+				// Handles YYYYMMDD
+				if (/^\d{8}$/.test(vDate)) {
 
-            return new Date(
-                parseInt(vDate.substring(0, 4), 10),
-                parseInt(vDate.substring(4, 6), 10) - 1,
-                parseInt(vDate.substring(6, 8), 10)
-            );
-        }
+					return new Date(
+						parseInt(vDate.substring(0, 4), 10),
+						parseInt(vDate.substring(4, 6), 10) - 1,
+						parseInt(vDate.substring(6, 8), 10)
+					);
+				}
 
-        var oParsed = new Date(vDate);
+				var oParsed = new Date(vDate);
 
-        if (!isNaN(oParsed.getTime())) {
-            return oParsed;
-        }
-    }
+				if (!isNaN(oParsed.getTime())) {
+					return oParsed;
+				}
+			}
 
-    return new Date();
-},
+			return new Date();
+		},
 
 		_fmt: function(nValue) {
 			return Math.round(Number(nValue) || 0).toLocaleString("en-IN");
@@ -2553,18 +2694,18 @@ sap.ui.define([
 			});
 		},
 
-		_dateToIso: function (oDate) {
+		_dateToIso: function(oDate) {
 
-    if (!(oDate instanceof Date) || isNaN(oDate.getTime())) {
-        return "";
-    }
+			if (!(oDate instanceof Date) || isNaN(oDate.getTime())) {
+				return "";
+			}
 
-    var iMonth = oDate.getMonth() + 1;
-    var iDay = oDate.getDate();
+			var iMonth = oDate.getMonth() + 1;
+			var iDay = oDate.getDate();
 
-    return oDate.getFullYear() + "-" +
-        (iMonth < 10 ? "0" : "") + iMonth + "-" +
-        (iDay < 10 ? "0" : "") + iDay;
-}
+			return oDate.getFullYear() + "-" +
+				(iMonth < 10 ? "0" : "") + iMonth + "-" +
+				(iDay < 10 ? "0" : "") + iDay;
+		}
 	});
 });
