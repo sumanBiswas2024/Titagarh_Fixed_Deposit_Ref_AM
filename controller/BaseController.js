@@ -1718,6 +1718,23 @@ sap.ui.define([
 			var aActive = aFds.filter(function(oFd) {
 				return oFd.status === "active";
 			});
+			// Problem: Dashboard portfolio KPIs excluded deposits already marked Renewed.
+			// Keep aActive active-only for charts and workflows; use this set for KPI totals.
+			var aActiveAndRenewed = aFds.filter(function(oFd) {
+				return oFd.status === "active" || oFd.status === "renewed";
+			});
+			var fKpiCorpus = aActiveAndRenewed.reduce(function(iSum, oFd) {
+				return iSum + oFd.principal;
+			}, 0);
+			var fKpiLienCorpus = aActiveAndRenewed.reduce(function(iSum, oFd) {
+				return iSum + (oFd.lienAmt || 0);
+			}, 0);
+			var fKpiNotLienCorpus = aActiveAndRenewed.reduce(function(iSum, oFd) {
+				return iSum + (oFd.notLienAmt || 0);
+			}, 0);
+			var fKpiAccrued = aActiveAndRenewed.reduce(function(iSum, oFd) {
+				return iSum + oFd.currentMonthAccrual;
+			}, 0);
 			var fCorpus = aActive.reduce(function(iSum, oFd) {
 				return iSum + oFd.principal;
 			}, 0);
@@ -1794,15 +1811,27 @@ sap.ui.define([
 					return oEntry.type.toLowerCase() === sAcctFilter;
 				}),
 				metrics: {
-					totalCorpus: this._fmt(fCorpus),
+					// Problem: Principal KPI previously summed active deposits only.
+					// totalCorpus: this._fmt(fCorpus),
+					totalCorpus: this._fmt(fKpiCorpus),
 					totalLien: this._fmt(fLienCorpus),
 					totalNotLien: this._fmt(fNotLienCorpus),
-					accruedInterest: this._fmt(fAccrued),
-					activeCount: aActive.length + " active deposit" + (aActive.length === 1 ? "" : "s"),
-					activeCountSubText: bIsHistorical ? ("Active on " + sAsOfDateFormatted) : "Active",
-					totalCorpusSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active FDs",
+					// Problem: Accrued-interest KPI previously summed active deposits only.
+					// accruedInterest: this._fmt(fAccrued),
+					accruedInterest: this._fmt(fKpiAccrued),
+					// Problem: Deposit count previously omitted renewed deposits; the long label also wrapped in the KPI card.
+					// activeCount: aActive.length + " active deposit" + (aActive.length === 1 ? "" : "s"),
+					activeCount: aActiveAndRenewed.length + " active deposit" + (aActiveAndRenewed.length === 1 ? "" : "s"),
+					// Problem: Count descriptor previously said Active when renewed records were excluded.
+					// activeCountSubText: bIsHistorical ? ("Active on " + sAsOfDateFormatted) : "Active",
+					activeCountSubText: bIsHistorical ? ("Active or renewed on " + sAsOfDateFormatted) : "Active and renewed",
+					// Problem: Principal KPI descriptor omitted the renewed records now included.
+					// totalCorpusSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active FDs",
+					totalCorpusSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active and renewed FDs",
 					accruedInterestPeriod: bIsHistorical ? ("Month to " + sAsOfDateFormatted) : "Current Month",
-					avgRateSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active FDs",
+					// Problem: Average-rate descriptor omitted the renewed records now included.
+					// avgRateSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active FDs",
+					avgRateSubText: bIsHistorical ? ("As of " + sAsOfDateFormatted) : "Across active and renewed FDs",
 					maturingThisMonth: this._countMaturingThisMonth(aFds, oAsOfDate) + " FDs",
 					autoRenewCount: aActive.filter(function(oFd) {
 						return oFd.autoRenew;
@@ -1831,14 +1860,28 @@ sap.ui.define([
 				// Auto Renewal KPI fields
 				currentMonthYearText: this._fmtMonthYear(oAsOfDate),
 				maturingThisMonth: this._countMaturingThisMonth(aFds, oAsOfDate),
-				totalFdCorpus: this._fmt(fCorpus),
-				totalLienCorpus: this._fmt(fLienCorpus),
-				totalNotLienCorpus: this._fmt(fNotLienCorpus),
+				// Problem: Fixed Deposits principal KPI excluded renewed deposits.
+				// totalFdCorpus: this._fmt(fCorpus),
+				totalFdCorpus: this._fmt(fKpiCorpus),
+				// Problem: Fixed Deposits lien KPI excluded renewed deposits.
+				// totalLienCorpus: this._fmt(fLienCorpus),
+				totalLienCorpus: this._fmt(fKpiLienCorpus),
+				// Problem: Fixed Deposits available-balance KPI excluded renewed deposits.
+				// totalNotLienCorpus: this._fmt(fNotLienCorpus),
+				totalNotLienCorpus: this._fmt(fKpiNotLienCorpus),
 				avgInterestRate: (function() {
-					var fTotalPrincipal = aActive.reduce(function(sum, fd) {
+					// Problem: Fixed Deposits average-rate KPI used active-only values.
+					// var fTotalPrincipal = aActive.reduce(function(sum, fd) { return sum + Number(fd.principal || 0); }, 0);
+					var fTotalPrincipal = aActiveAndRenewed.reduce(function(sum, fd) {
 						return sum + Number(fd.principal || 0);
 					}, 0);
-					var fTotalInterest = aActive.reduce(function(sum, fd) {
+					// var fTotalInterest = aActive.reduce(function(sum, fd) {
+					//	var p = Number(fd.principal || 0);
+					//	var r = Number(fd.rate || 0);
+					//	var i = (fd.interest !== undefined && !isNaN(parseFloat(fd.interest)) && parseFloat(fd.interest) > 0) ? parseFloat(fd.interest) : (p * r) / 100;
+					//	return sum + i;
+					// }, 0);
+					var fTotalInterest = aActiveAndRenewed.reduce(function(sum, fd) {
 						var p = Number(fd.principal || 0);
 						var r = Number(fd.rate || 0);
 						var i = (fd.interest !== undefined && !isNaN(parseFloat(fd.interest)) && parseFloat(fd.interest) > 0) ? parseFloat(fd.interest) :
@@ -1847,8 +1890,14 @@ sap.ui.define([
 					}, 0);
 					return fTotalPrincipal > 0 ? ((fTotalInterest / fTotalPrincipal) * 100).toFixed(2) : "0.00";
 				})(),
-				nextMaturityDate: aActive.length > 0 ? this._fmtDate(
-					aActive.map(function(fd) {
+				// Problem: Next-maturity KPI searched active deposits only.
+				// nextMaturityDate: aActive.length > 0 ? this._fmtDate(
+				//	aActive.map(function(fd) { return this._maturityDate(fd); }.bind(this))
+				//		.filter(function(d) { return d && d.getTime() > oAsOfDate.getTime(); })
+				//		.sort(function(a, b) { return a.getTime() - b.getTime(); })[0]
+				// ) : "N/A",
+				nextMaturityDate: aActiveAndRenewed.length > 0 ? this._fmtDate(
+					aActiveAndRenewed.map(function(fd) {
 						return this._maturityDate(fd);
 					}.bind(this))
 					.filter(function(d) {

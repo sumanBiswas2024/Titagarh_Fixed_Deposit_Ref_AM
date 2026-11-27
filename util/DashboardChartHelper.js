@@ -8,7 +8,9 @@ sap.ui.define([], function () {
 		 */
 		getAverageInterestRate: function (aFds) {
 			if (!aFds || aFds.length === 0) return "0.00%";
-			var aActive = aFds.filter(function(fd) { return fd.status === "active"; });
+			// Problem: Dashboard average-rate KPI excluded renewed deposits.
+			// var aActive = aFds.filter(function(fd) { return fd.status === "active"; });
+			var aActive = aFds.filter(function(fd) { return fd.status === "active" || fd.status === "renewed"; });
 			if (aActive.length === 0) return "0.00%";
 
 			var totalBaseValue = 0;
