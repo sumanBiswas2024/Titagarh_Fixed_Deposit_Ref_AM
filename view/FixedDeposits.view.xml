@@ -90,7 +90,7 @@
 									<HBox alignItems="Center"><core:Icon src="sap-icon://sys-enter-2" color="#059669" class="sapUiTinyMarginEnd" size="0.75rem"/><Text text="+12%" class="fdAdvKpiTrend fdAdvKpiTrendUp"/></HBox>
 								</HBox>
 								<HBox justifyContent="SpaceBetween" alignItems="Center" width="100%">
-									<Text text="Active Fixed Deposits" class="fdAdvKpiLabel"/>
+									<Text text="Active and Renewed FDs" class="fdAdvKpiLabel"/>
 									<Text text="vs last month" class="fdAdvKpiTrendLabel"/>
 								</HBox>
 							</VBox>
